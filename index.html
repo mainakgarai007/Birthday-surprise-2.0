@@ -14,6 +14,45 @@
 </head>
 <body>
 
+  <!-- Birthday Surprise 2.0: creator dashboard / recipient gate -->
+  <section id="creator-portal" class="portal-screen" aria-live="polite">
+    <div class="portal-card">
+      <div class="portal-kicker">💌 BIRTHDAY SURPRISE 2.0</div>
+      <h1 id="portal-title">Create your surprise link</h1>
+      <p id="portal-subtitle">Make a tiny surprise for your favourite person.</p>
+      <form id="creator-form" class="portal-form">
+        <label>Your gender
+          <select id="creator-gender" required>
+            <option value="">Select your gender</option><option value="male">Male</option><option value="female">Female</option><option value="other">Other</option><option value="unspecified">Prefer not to say</option>
+          </select>
+        </label>
+        <label>Favourite person's gender
+          <select id="fav-gender" required>
+            <option value="">Select your favourite person's gender</option><option value="male">Male</option><option value="female">Female</option><option value="other">Other</option><option value="unspecified">Prefer not to say</option>
+          </select>
+        </label>
+        <label>Your name
+          <input id="creator-name" maxlength="40" autocomplete="name" placeholder="Enter your name" required />
+        </label>
+        <label id="fav-name-label" for="fav-name">Your favourite person's name
+          <input id="fav-name" maxlength="40" placeholder="Your favourite person's name" required />
+        </label>
+        <label>Create your pass key
+          <input id="creator-passkey" minlength="4" maxlength="24" autocomplete="off" placeholder="At least 4 characters" required />
+        </label>
+        <button class="portal-primary" type="submit">✨ Create my link</button>
+        <p id="portal-error" class="portal-error" role="alert"></p>
+      </form>
+      <div id="creator-dashboard" class="portal-dashboard">
+        <div class="portal-dashboard-head"><h2>Your links</h2><span id="link-limit">0 / 3</span></div>
+        <div id="created-links" class="created-links"><p class="portal-muted">Your created links will appear here.</p></div>
+        <div class="portal-stats"><span>🔗 Link opens</span><strong id="total-opens">—</strong></div>
+        <p class="portal-note">Open counts across different devices need a connected analytics backend. Links and pass keys work without an account.</p>
+      </div>
+    </div>
+  </section>
+
+
   <!-- Ambient Warm Candlelight & Rose Petal Layer -->
   <div id="bg-ambient"></div>
 
