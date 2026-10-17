@@ -761,7 +761,7 @@ startCountdown();
     try {
       const raw = new URLSearchParams(location.hash.slice(1)).get('gift');
       if (!raw) return null;
-      const payload = JSON.parse(decodeURIComponent(escape(atob(raw))));
+      const base64 = raw.replace(/-/g, '+').replace(/_/g, '/');\n      const payload = JSON.parse(decodeURIComponent(escape(atob(base64))));
       if (!payload || payload.v !== 2 || !payload.id || !payload.passKey) return null;
       return payload;
     } catch (_) { return null; }
@@ -861,7 +861,7 @@ startCountdown();
     if (!name || !target || !/^\\d{4}$/.test(passKey)) { error.textContent = 'Please fill every field. Pass key must be exactly 4 digits (0–9).'; return; }
     const id = (crypto && crypto.randomUUID) ? crypto.randomUUID() : Date.now().toString(36) + Math.random().toString(36).slice(2,8);
     const data = { v:2, id, creatorGender:creatorGender.value, favGender:favGender.value, creatorName:name, favName:target, passKey };
-    const encoded = btoa(unescape(encodeURIComponent(JSON.stringify(data))));
+    const encoded = btoa(unescape(encodeURIComponent(JSON.stringify(data)))).replace(/\\+/g, '-').replace(/\\//g, '_').replace(/=+$/g, '');
     const url = location.origin + location.pathname + '#gift=' + encoded;
     items.push({ id, creatorName:name, favName:target, favGender:favGender.value, url, createdAt:Date.now() });
     safeWrite(items);
