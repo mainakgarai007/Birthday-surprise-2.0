@@ -767,6 +767,7 @@ startCountdown();
   const feedbackMessage = document.getElementById('feedback-message');
   const feedbackStatus = document.getElementById('feedback-status');
   const closeWelcomePopup = () => welcomePopup?.classList.add('popup-dismissed');
+  document.getElementById('welcome-open')?.addEventListener('click', () => { welcomePopup?.classList.remove('popup-dismissed'); feedbackModal.hidden = true; });
   document.getElementById('welcome-close')?.addEventListener('click', closeWelcomePopup);
   document.getElementById('welcome-create')?.addEventListener('click', closeWelcomePopup);
   document.getElementById('welcome-feedback')?.addEventListener('click', () => { closeWelcomePopup(); feedbackModal.hidden = false; });
