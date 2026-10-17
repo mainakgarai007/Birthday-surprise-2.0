@@ -1,7 +1,4 @@
-/* ───
-   Project: Secret Birthday Gift
-   Author: @saklin_01
-─── */
+/* Birthday Surprise 2.0 | Created by MG */
 
 /* ─── CLOCK DIAL TICKS & NUMERALS ─── */
 (function initClockFace() {
@@ -765,6 +762,19 @@ startCountdown();
   const list = document.getElementById('created-links');
   const totalOpens = document.getElementById('total-opens');
   const storageKey = 'birthday-surprise-2-links-v1';
+  const welcomePopup = document.getElementById('welcome-popup');
+  const feedbackModal = document.getElementById('feedback-modal');
+  const feedbackMessage = document.getElementById('feedback-message');
+  const feedbackStatus = document.getElementById('feedback-status');
+  document.getElementById('welcome-create')?.addEventListener('click', () => welcomePopup.classList.add('popup-dismissed'));
+  document.getElementById('welcome-feedback')?.addEventListener('click', () => { welcomePopup.classList.add('popup-dismissed'); feedbackModal.hidden = false; });
+  document.getElementById('feedback-close')?.addEventListener('click', () => { feedbackModal.hidden = true; });
+  document.getElementById('feedback-copy')?.addEventListener('click', async () => {
+    const value = feedbackMessage.value.trim();
+    if (!value) { feedbackStatus.textContent = 'Write your feedback first.'; return; }
+    try { await navigator.clipboard.writeText(value); feedbackStatus.textContent = 'Copied! Paste it into the GitHub feedback page.'; }
+    catch (_) { feedbackMessage.focus(); feedbackMessage.select(); feedbackStatus.textContent = 'Select and copy the feedback, then paste it into GitHub.'; }
+  });
   const safeRead = () => {
     try { const value = JSON.parse(localStorage.getItem(storageKey) || '[]'); return Array.isArray(value) ? value.slice(0,3) : []; }
     catch (_) { return []; }
@@ -817,6 +827,14 @@ startCountdown();
     if (txt) txt.textContent = 'Enter the 4-digit pass key to unlock 💖';
     if (typeof window.resetQuiz === 'function') window.resetQuiz();
     if (title && payload.favName) title.setAttribute('aria-label', 'Surprise for ' + payload.favName);
+    if (payload.favName) {
+      const headline = document.getElementById('letter-headline-el');
+      const p2 = document.getElementById('letter-p2-el');
+      const closing = document.getElementById('letter-closing-el');
+      if (headline) headline.textContent = 'Happy birthday, ' + payload.favName + '! ❤️';
+      if (p2) p2.textContent = "I'm so lucky to have you, " + payload.favName + ", and I can't wait to make a million more memories with you. Here's to you, your dreams, and all the happiness you deserve.";
+      if (closing) closing.textContent = 'Happy birthday, ' + payload.favName + '. Sending you lots of happiness. 🫶🏻🎂❤️';
+    }
   };
   const updateFavLabel = () => {
     const gender = creatorGender.value;
