@@ -38,7 +38,7 @@
           <input id="fav-name" maxlength="40" placeholder="Your favourite person's name" required />
         </label>
         <label>Create your pass key
-          <input id="creator-passkey" minlength="4" maxlength="24" autocomplete="off" placeholder="At least 4 characters" required />
+          <input id="creator-passkey" type="password" inputmode="numeric" pattern="[0-9]{4}" minlength="4" maxlength="4" autocomplete="off" placeholder="Create a 4-digit pass key" required />
         </label>
         <button class="portal-primary" type="submit">✨ Create my link</button>
         <p id="portal-error" class="portal-error" role="alert"></p>
