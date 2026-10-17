@@ -157,12 +157,25 @@ function submitBirthdayDate() {
       `;
       triggerElementAnim(btnGroup, 'btn-entrance-bounce');
     }
-    document.getElementById('quiz-screen').classList.remove('show');
-    document.getElementById('quiz-screen').classList.add('hidden');
+    // Explicitly switch screens so the recipient flow works even if another
+    // startup animation added classes or inline styles on a slow mobile device.
+    const quizScreen = document.getElementById('quiz-screen');
     const surpriseEl = document.getElementById('surprise-screen');
+    const giftEl = document.getElementById('gift-screen');
+    if (quizScreen) {
+      quizScreen.classList.remove('show');
+      quizScreen.classList.add('hidden');
+      quizScreen.style.display = 'none';
+    }
     if (surpriseEl) {
-      surpriseEl.classList.remove('hidden-screen');
+      surpriseEl.style.display = 'flex';
+      surpriseEl.classList.remove('hidden-screen', 'hidden');
       surpriseEl.classList.add('show-screen');
+    }
+    if (giftEl) {
+      giftEl.style.display = 'flex';
+      giftEl.classList.remove('show-screen');
+      giftEl.classList.add('hidden-screen');
     }
     launchConfetti();
   } else {
@@ -761,8 +774,12 @@ startCountdown();
     try {
       const raw = new URLSearchParams(location.hash.slice(1)).get('gift');
       if (!raw) return null;
-      const base64 = raw.replace(/-/g, '+').replace(/_/g, '/');
-      const payload = JSON.parse(decodeURIComponent(escape(atob(base64))));
+      let base64 = raw.replace(/-/g, '+').replace(/_/g, '/');
+      // Restore Base64 padding; some mobile browsers reject unpadded payloads.
+      base64 += '='.repeat((4 - (base64.length % 4)) % 4);
+      const binary = atob(base64);
+      const bytes = Uint8Array.from(binary, ch => ch.charCodeAt(0));
+      const payload = JSON.parse(new TextDecoder().decode(bytes));
       if (!payload || payload.v !== 2 || !payload.id || !payload.passKey) return null;
       return payload;
     } catch (_) { return null; }
