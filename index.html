@@ -1,187 +1,850 @@
-<!doctype html>
+<!--
+  Project: Secret Birthday Gift
+  Author: @saklin_01
+-->
+<!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <meta name="theme-color" content="#10131a">
-  <title>All-in Firebase Test</title>
-  <style>
-    :root { color-scheme: dark; --bg:#10131a; --panel:#191e29; --line:#30394a; --text:#eef2ff; --muted:#aab4c8; --accent:#8b9cff; --good:#5ee0a0; --bad:#ff8585; }
-    * { box-sizing:border-box; }
-    body { margin:0; padding:22px 14px 40px; background:radial-gradient(circle at top,#202941 0,var(--bg) 48%); color:var(--text); font:16px/1.5 system-ui,-apple-system,Segoe UI,sans-serif; }
-    main { max-width:650px; margin:0 auto; }
-    .hero,.panel { background:rgba(25,30,41,.96); border:1px solid var(--line); border-radius:18px; padding:20px; margin-bottom:14px; }
-    .eyebrow { color:var(--accent); font-weight:750; letter-spacing:.08em; font-size:.78rem; text-transform:uppercase; }
-    h1 { font-size:clamp(1.7rem,6vw,2.25rem); line-height:1.15; margin:.45rem 0 .65rem; }
-    p { margin:.45rem 0; color:var(--muted); }
-    h2 { font-size:1.08rem; margin:0 0 8px; }
-    .status { border:1px solid var(--line); border-radius:12px; padding:12px; margin-top:12px; overflow-wrap:anywhere; }
-    .status.good { border-color:#276e52; color:var(--good); }
-    .status.bad { border-color:#793e48; color:var(--bad); }
-    .uid { font: .88rem ui-monospace,SFMono-Regular,Consolas,monospace; overflow-wrap:anywhere; color:var(--text); }
-    button { width:100%; padding:13px 16px; margin-top:10px; border:0; border-radius:12px; font:700 1rem system-ui,sans-serif; cursor:pointer; background:var(--accent); color:#111629; }
-    button.secondary { background:#2b3446; color:var(--text); border:1px solid #46516a; }
-    button:disabled { opacity:.55; cursor:wait; }
-    .small { font-size:.86rem; }
-    pre { white-space:pre-wrap; overflow-wrap:anywhere; background:#0c0f15; border:1px solid var(--line); border-radius:12px; padding:12px; color:#dce5ff; min-height:48px; }
-    code { color:#dce5ff; }
-    .warn { color:#ffd58a; }
-    footer { text-align:center; color:var(--muted); font-size:.8rem; padding:8px; }
-  </style>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="author" content="@saklin_01" />
+  <title>Happy Birthday 🎂</title>
+  <link href="https://fonts.googleapis.com/css2?family=Bubblegum+Sans&family=Chewy&family=Comic+Neue:wght@700&family=Courier+Prime:ital,wght@0,400;0,700;1,400;1,700&family=DynaPuff:wght@600;700&family=Fredoka:wght@600;700;800;900&family=Great+Vibes&family=Playfair+Display:wght@400;600;700;900&family=Poppins:wght@400;500;600;700&family=Sniglet:wght@800&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="style.css" />
 </head>
 <body>
-<main>
-  <section class="hero">
-    <div class="eyebrow">Common backend • diagnostic</div>
-    <h1>All-in Firebase Test</h1>
-    <p>Test anonymous sign-in and private Firestore save/read using your Firebase project.</p>
-    <div id="status" class="status">Connecting to Firebase…</div>
-  </section>
 
-  <section class="panel">
-    <h2>1. Anonymous account</h2>
-    <p>This creates or resumes an anonymous Firebase session in this browser.</p>
-    <div><strong>UID:</strong> <span id="uid" class="uid">Not signed in</span></div>
-    <button id="signin">Sign in anonymously</button>
-  </section>
+  <!-- Ambient Warm Candlelight & Rose Petal Layer -->
+  <div id="bg-ambient"></div>
 
-  <section class="panel">
-    <h2>2. Save a test document</h2>
-    <p>Writes only to <code>users/{your-uid}/data/connectionTest</code>, matching your current Firestore rules.</p>
-    <button id="save" disabled>Save test data</button>
-    <button id="read" class="secondary" disabled>Read test data</button>
-    <div id="result"><pre>No test performed yet.</pre></div>
-  </section>
+  <!-- Shinchan Date Verification Screen -->
+  <div id="quiz-screen">
+    <div class="quiz-card" id="quiz-card">
+      
+      <!-- Left Side: Scalloped Cameo Frame with Shinchan GIF -->
+      <div class="quiz-visual-side">
+        <span class="cameo-star s1">★</span>
+        <span class="cameo-star s2">★</span>
+        <span class="cameo-star s3">★</span>
+        <span class="cameo-star s4">★</span>
+        <span class="cameo-star s5">★</span>
+        <span class="cameo-star s6">★</span>
 
-  <section class="panel">
-    <h2>What a successful test means</h2>
-    <p>Anonymous sign-in works, and the current Firestore rules allow this browser session to write and read its own test document.</p>
-    <p class="warn small">Security note: your Firebase web config is designed to be used in client apps. Keep access controlled with Security Rules; never put service-account private keys or admin credentials in this file.</p>
-  </section>
-  <footer>All-in • Firebase diagnostic page</footer>
-</main>
+        <div class="rosette-cameo">
+          <svg class="rosette-svg" viewBox="0 0 340 340" aria-hidden="true">
+            <path class="rosette-petals" d="M 40 18 Q 56.3 5, 72.5 18 Q 88.8 5, 105.0 18 Q 121.3 5, 137.5 18 Q 153.8 5, 170.0 18 Q 186.3 5, 202.5 18 Q 218.8 5, 235.0 18 Q 251.3 5, 267.5 18 Q 283.8 5, 300.0 18 Q 335 7, 322 40 Q 335 56.3, 322 72.5 Q 335 88.8, 322 105.0 Q 335 121.3, 322 137.5 Q 335 153.8, 322 170.0 Q 335 186.3, 322 202.5 Q 335 218.8, 322 235.0 Q 335 251.3, 322 267.5 Q 335 283.8, 322 300.0 Q 335 333, 300 322 Q 283.8 335, 267.5 322 Q 251.3 335, 235.0 322 Q 218.8 335, 202.5 322 Q 186.3 335, 170.0 322 Q 153.8 335, 137.5 322 Q 121.3 335, 105.0 322 Q 88.8 335, 72.5 322 Q 56.3 335, 40.0 322 Q 5 333, 18 300 Q 5 283.8, 18 267.5 Q 5 251.3, 18 235.0 Q 5 218.8, 18 202.5 Q 5 186.3, 18 170.0 Q 5 153.8, 18 137.5 Q 5 121.3, 18 105.0 Q 5 88.8, 18 72.5 Q 5 56.3, 18 40.0 Q 5 7, 40 18 Z" />
+            <rect x="36" y="36" width="268" height="268" rx="18" ry="18" class="rosette-ring-outer" />
+            <rect x="44" y="44" width="252" height="252" rx="14" ry="14" class="rosette-ring-inner" />
+          </svg>
+          <div class="shinchan-box">
+            <img id="shinchan-img" src="assets/shinchan-birthday.png" alt="Shinchan Birthday" />
+          </div>
+        </div>
+      </div>
 
-<script type="module">
-  import { initializeApp } from "https://www.gstatic.com/firebasejs/11.10.0/firebase-app.js";
-  import { getAuth, signInAnonymously, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/11.10.0/firebase-auth.js";
-  import { getFirestore, doc, setDoc, getDoc, serverTimestamp } from "https://www.gstatic.com/firebasejs/11.10.0/firebase-firestore.js";
+      <!-- Right Side: Passcode Style Date Writing & Round Keypad -->
+      <div class="quiz-input-side">
+        <!-- Organic Torn Deckle Paper Divider -->
+        <svg class="torn-deckle" viewBox="0 0 30 1000" preserveAspectRatio="none" aria-hidden="true">
+          <path d="M 30 0 L 16 70 L 26 150 L 12 250 L 25 350 L 10 450 L 26 560 L 12 660 L 26 770 L 14 880 L 27 1000 L 30 1000 Z" fill="#9983b3" />
+        </svg>
 
-  const firebaseConfig = {
-  apiKey: "AIzaSyBdFADDci2DSbCzEOkOD3KE5YYLKkxfc60",
-  authDomain: "all-in-a5f3b.firebaseapp.com",
-  projectId: "all-in-a5f3b",
-  storageBucket: "all-in-a5f3b.firebasestorage.app",
-  messagingSenderId: "924508433076",
-  appId: "1:924508433076:web:4cd108992dbfc45b9845e1"
-};
+        <div class="passcode-container">
+          <div class="passcode-header">
+            <h3 id="quiz-title">Enter a passcode</h3>
+            <p id="quiz-text">Enter the 4-digit secret passcode 💖</p>
+          </div>
 
-  const $ = (id) => document.getElementById(id);
-  const statusEl = $("status");
-  const uidEl = $("uid");
-  const signinBtn = $("signin");
-  const saveBtn = $("save");
-  const readBtn = $("read");
-  let auth, db, currentUser;
+          <!-- 4 Passcode Boxes (Matching Reference Exactly) -->
+          <div class="passcode-boxes-wrap">
+            <div class="passcode-box" id="b0"></div>
+            <div class="passcode-box" id="b1"></div>
+            <div class="passcode-box" id="b2"></div>
+            <div class="passcode-box" id="b3"></div>
+          </div>
 
-  function showStatus(message, type = "") {
-    statusEl.textContent = message;
-    statusEl.className = "status" + (type ? " " + type : "");
-  }
-  function showResult(message) {
-    $("result").innerHTML = "";
-    const pre = document.createElement("pre");
-    pre.textContent = message;
-    $("result").appendChild(pre);
-  }
-  function errorMessage(error) {
-    const code = error?.code ? ` (${error.code})` : "";
-    return `${error?.message || String(error)}${code}`;
-  }
-  function testDocRef() {
-    if (!currentUser) throw new Error("Please sign in anonymously first.");
-    return doc(db, "users", currentUser.uid, "data", "connectionTest");
-  }
+          <!-- Virtual Circular Keypad (Reference Aesthetic) -->
+          <div class="keypad" id="keypad">
+            <button class="key-btn" onclick="pressKey('1')"><span>1</span></button>
+            <button class="key-btn" onclick="pressKey('2')"><span>2</span></button>
+            <button class="key-btn" onclick="pressKey('3')"><span>3</span></button>
+            <button class="key-btn" onclick="pressKey('4')"><span>4</span></button>
+            <button class="key-btn" onclick="pressKey('5')"><span>5</span></button>
+            <button class="key-btn" onclick="pressKey('6')"><span>6</span></button>
+            <button class="key-btn" onclick="pressKey('7')"><span>7</span></button>
+            <button class="key-btn" onclick="pressKey('8')"><span>8</span></button>
+            <button class="key-btn" onclick="pressKey('9')"><span>9</span></button>
+            <button class="key-btn key-action" onclick="deleteDigit()">⌫</button>
+            <button class="key-btn" onclick="pressKey('0')"><span>0</span></button>
+            <button class="key-btn key-submit" onclick="submitBirthdayDate()">💖</button>
+          </div>
 
-  try {
-    const app = initializeApp(firebaseConfig);
-    auth = getAuth(app);
-    db = getFirestore(app);
-    showStatus("Firebase SDK loaded. Sign in to run the test.", "good");
-  } catch (error) {
-    showStatus("Firebase initialization failed: " + errorMessage(error), "bad");
-  }
+          <button id="retry-btn" class="hidden-btn" onclick="resetQuiz()">Try Again 🔄</button>
+        </div>
+      </div>
 
-  onAuthStateChanged(auth, (user) => {
-    currentUser = user;
-    uidEl.textContent = user ? user.uid : "Not signed in";
-    saveBtn.disabled = !user;
-    readBtn.disabled = !user;
-    if (user) showStatus("Signed in anonymously. You can test Firestore now.", "good");
-  });
+    </div>
+  </div>
 
-  signinBtn.addEventListener("click", async () => {
-    signinBtn.disabled = true;
-    try {
-      const credential = await signInAnonymously(auth);
-      currentUser = credential.user;
-      uidEl.textContent = currentUser.uid;
-      saveBtn.disabled = false;
-      readBtn.disabled = false;
-      showStatus("Anonymous sign-in successful.", "good");
-      showResult("Signed in. UID: " + currentUser.uid);
-    } catch (error) {
-      showStatus("Sign-in failed: " + errorMessage(error), "bad");
-      showResult("Check Firebase Console → Authentication → Sign-in method → Anonymous. Also check that the project has not exceeded its limits.");
-    } finally {
-      signinBtn.disabled = false;
-    }
-  });
+  <!-- Surprise Question Screen (Gingham Tablecloth & Dancing Shinchan Card) -->
+  <div id="surprise-screen" class="hidden-screen">
+    <div class="gingham-stage">
+      <div class="surprise-paper-card">
+        
+        <!-- Decorative Sprinkled Stars inside Card -->
+        <span class="card-bg-star cs1">✦</span>
+        <span class="card-bg-star cs2">★</span>
+        <span class="card-bg-star cs3">✦</span>
+        <span class="card-bg-star cs4">★</span>
+        <span class="card-bg-star cs5">✦</span>
+        <span class="card-bg-star cs6">★</span>
+        <span class="card-bg-star cs7">✦</span>
+        <span class="card-bg-star cs8">★</span>
 
-  saveBtn.addEventListener("click", async () => {
-    saveBtn.disabled = true;
-    try {
-      const ref = testDocRef();
-      await setDoc(ref, {
-        message: "Hello from All-in Firebase Test",
-        project: "All-in",
-        test: true,
-        updatedAt: serverTimestamp()
-      });
-      showStatus("Firestore save successful.", "good");
-      showResult("SUCCESS: test document saved.\nPath: " + ref.path + "\nNow tap “Read test data” to verify reading.");
-    } catch (error) {
-      showStatus("Firestore save failed: " + errorMessage(error), "bad");
-      showResult("Common causes:\n• Firestore Rules were not published or have not propagated yet.\n• Anonymous sign-in did not finish.\n• Network or Firebase project configuration issue.\n\nDetails: " + errorMessage(error));
-    } finally {
-      saveBtn.disabled = !currentUser;
-    }
-  });
+        <!-- Curved Arched Title: "I have made something for you" / "Are you really excited?" -->
+        <div class="curved-title-wrap">
+          <svg class="curved-title-svg" viewBox="0 0 1100 170" preserveAspectRatio="xMidYMid meet">
+            <path id="arch-path" d="M 50,150 Q 550,20 1050,150" fill="none" />
+            <text class="arched-text">
+              <textPath id="arch-text-path" href="#arch-path" xlink:href="#arch-path" startOffset="50%" text-anchor="middle">
+                I have made something for you
+              </textPath>
+            </text>
+          </svg>
+        </div>
 
-  readBtn.addEventListener("click", async () => {
-    readBtn.disabled = true;
-    try {
-      const ref = testDocRef();
-      const snapshot = await getDoc(ref);
-      if (!snapshot.exists()) {
-        showStatus("No test document found yet.", "bad");
-        showResult("No document at: " + ref.path + "\nTap “Save test data” first.");
-      } else {
-        showStatus("Firestore read successful.", "good");
-        const data = snapshot.data();
-        showResult("SUCCESS: test document read.\nPath: " + ref.path + "\n\n" + JSON.stringify(data, (key, value) => {
-          if (value && typeof value === "object" && value.seconds !== undefined && value.nanoseconds !== undefined) {
-            return new Date(value.seconds * 1000).toLocaleString();
-          }
-          return value;
-        }, 2));
-      }
-    } catch (error) {
-      showStatus("Firestore read failed: " + errorMessage(error), "bad");
-      showResult("Details: " + errorMessage(error));
-    } finally {
-      readBtn.disabled = !currentUser;
-    }
-  });
-</script>
+        <!-- Center: Shinchan Dancing GIF -->
+        <div class="dance-gif-wrap">
+          <img id="dance-gif" src="assets/shinchan-dance.gif" alt="Shinchan Dancing" />
+        </div>
+
+        <!-- Question Prompt: "Do you wanna see it ?" -->
+        <h2 class="prompt-text" id="surprise-prompt">Do you wanna see it ?</h2>
+
+        <!-- Red Capsule YES / NO Buttons (Matching Reference Image) -->
+        <div class="surprise-btn-group">
+          <button id="btn-yes" class="pill-btn yes-btn" onclick="handleChoice('yes')">
+            <span class="btn-shine-tr"></span>
+            <span class="btn-label">YES</span>
+            <span class="btn-shine-bl"></span>
+          </button>
+          <button id="btn-no" class="pill-btn no-btn" onclick="handleChoice('no')">
+            <span class="btn-shine-tr"></span>
+            <span class="btn-label">NO</span>
+            <span class="btn-shine-bl"></span>
+          </button>
+        </div>
+
+      </div>
+    </div>
+  </div>
+
+  <!-- Mystery Gift Boxes Screen (3 Floating Heart Gift Boxes Matching Screenshot) -->
+  <div id="gift-screen" class="hidden-screen">
+    <!-- Decorative Sprinkled Stars (Inspired by Passcode Wallpaper in a romantic pastel style) -->
+    <span class="gift-bg-star gs1">✦</span>
+    <span class="gift-bg-star gs2">★</span>
+    <span class="gift-bg-star gs3">✦</span>
+    <span class="gift-bg-star gs4">★</span>
+    <span class="gift-bg-star gs5">✦</span>
+    <span class="gift-bg-star gs6">★</span>
+    <span class="gift-bg-star gs7">✦</span>
+    <span class="gift-bg-star gs8">★</span>
+    <span class="gift-bg-star gs9">✦</span>
+    <span class="gift-bg-star gs10">★</span>
+
+    <div class="gift-stage">
+      
+      <!-- 3 Floating Mystery Heart Boxes Row -->
+      <div class="mystery-boxes-row">
+        <!-- Reusable Heart Box Asset in hidden SVG defs -->
+        <svg style="display:none">
+          <defs>
+            <filter id="neon-glow-def" x="-20%" y="-20%" width="140%" height="140%">
+              <feGaussianBlur stdDeviation="3.5" result="blur"/>
+              <feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge>
+            </filter>
+            <pattern id="heart-dots-def" width="14" height="14" patternUnits="userSpaceOnUse">
+              <circle cx="7" cy="7" r="2.2" fill="#8f0f20" opacity="0.55"/>
+            </pattern>
+            <g id="heart-box-asset">
+              <g class="box-rays">
+                <line x1="20" y1="45" x2="6" y2="35" stroke="#f48fb1" stroke-width="3" stroke-linecap="round" />
+                <line x1="12" y1="85" x2="0" y2="85" stroke="#f48fb1" stroke-width="3" stroke-linecap="round" />
+                <line x1="24" y1="130" x2="10" y2="142" stroke="#f48fb1" stroke-width="3" stroke-linecap="round" />
+                <line x1="45" y1="175" x2="35" y2="190" stroke="#f48fb1" stroke-width="3" stroke-linecap="round" />
+                <line x1="240" y1="45" x2="254" y2="35" stroke="#f48fb1" stroke-width="3" stroke-linecap="round" />
+                <line x1="248" y1="85" x2="260" y2="85" stroke="#f48fb1" stroke-width="3" stroke-linecap="round" />
+                <line x1="236" y1="130" x2="250" y2="142" stroke="#f48fb1" stroke-width="3" stroke-linecap="round" />
+                <line x1="215" y1="175" x2="225" y2="190" stroke="#f48fb1" stroke-width="3" stroke-linecap="round" />
+                <line x1="85" y1="12" x2="80" y2="0" stroke="#f48fb1" stroke-width="3" stroke-linecap="round" />
+                <line x1="175" y1="12" x2="180" y2="0" stroke="#f48fb1" stroke-width="3" stroke-linecap="round" />
+              </g>
+              <path d="M 30,85 C 30,135 130,185 130,185 C 130,185 230,135 230,85 L 230,115 C 230,165 130,212 130,212 C 130,212 30,165 30,115 Z" fill="#6d0a17" />
+              <path d="M 30,105 C 30,155 130,202 130,202 C 130,202 230,155 230,105 L 230,115 C 230,165 130,212 130,212 C 130,212 30,165 30,115 Z" fill="#500610" />
+              <path class="box-lid" d="M 130,180 C 130,180 30,130 30,80 C 30,42 60,25 90,25 C 112,25 125,40 130,52 C 135,40 148,25 170,25 C 200,25 230,42 230,80 C 230,130 130,180 130,180 Z" fill="#c9172f" />
+              <path d="M 130,180 C 130,180 30,130 30,80 C 30,42 60,25 90,25 C 112,25 125,40 130,52 C 135,40 148,25 170,25 C 200,25 230,42 230,80 C 230,130 130,180 130,180 Z" fill="url(#heart-dots-def)" />
+              <path d="M 85,25 Q 110,95 140,175 L 122,176 Q 95,95 68,27 Z" fill="#ea2440" opacity="0.9" />
+              <path d="M 175,25 Q 150,95 120,175 L 138,176 Q 165,95 192,27 Z" fill="#ea2440" opacity="0.9" />
+              <g class="box-bow">
+                <path d="M 130,95 C 105,72 78,82 84,102 C 89,116 112,110 130,98 C 148,110 171,116 176,102 C 182,82 155,72 130,95 Z" fill="none" stroke="#ffffff" stroke-width="4.5" stroke-linecap="round" stroke-linejoin="round" filter="url(#neon-glow-def)" />
+                <circle cx="130" cy="97" r="7.5" fill="#ffffff" filter="url(#neon-glow-def)" />
+                <path d="M 126,102 Q 115,130 102,148 Q 112,142 128,112" fill="none" stroke="#ffffff" stroke-width="3.5" stroke-linecap="round" filter="url(#neon-glow-def)" />
+                <path d="M 134,102 Q 145,130 158,148 Q 148,142 132,112" fill="none" stroke="#ffffff" stroke-width="3.5" stroke-linecap="round" filter="url(#neon-glow-def)" />
+              </g>
+            </g>
+          </defs>
+        </svg>
+
+        <!-- Box 1 -->
+        <div class="mystery-box-item float-box-1" onclick="openMysteryBox(1)">
+          <div class="heart-box-visual">
+            <svg class="heart-box-svg" viewBox="0 0 260 220"><use href="#heart-box-asset"/></svg>
+          </div>
+        </div>
+
+        <!-- Box 2 -->
+        <div class="mystery-box-item float-box-2" onclick="openMysteryBox(2)">
+          <div class="heart-box-visual">
+            <svg class="heart-box-svg" viewBox="0 0 260 220"><use href="#heart-box-asset"/></svg>
+          </div>
+        </div>
+
+        <!-- Box 3 -->
+        <div class="mystery-box-item float-box-3" onclick="openMysteryBox(3)">
+          <div class="heart-box-visual">
+            <svg class="heart-box-svg" viewBox="0 0 260 220"><use href="#heart-box-asset"/></svg>
+          </div>
+        </div>
+      </div>
+
+      <!-- Aesthetic Framed Shinchan Cameo Mascot -->
+      <div class="mystery-shinchan-frame">
+        <span class="cameo-decor-star c-star1">✦</span>
+        <span class="cameo-decor-star c-star2">✦</span>
+        <div class="shinchan-cameo-inner">
+          <img src="assets/shinchan-gift.gif" alt="Shinchan Blushing Gift" />
+        </div>
+      </div>
+
+      <!-- Bottom Prompt Text -->
+      <div class="mystery-prompt-wrap">
+        <h2 class="mystery-title">Tap on the mystery box</h2>
+        <p class="mystery-subtitle">to unlock your gifts!</p>
+      </div>
+
+    </div>
+
+    <!-- Special Box 1: Clothesline Hanging Memories Board (Matching Reference Image 2) -->
+    <div id="memories-modal" class="gift-modal memories-board-overlay hidden">
+      <div class="memories-backdrop" onclick="closeMemoriesModal()">
+        <!-- Sprinkled Pastel Twinkling Stars in Background (matching other screens) -->
+        <span class="mem-bg-star mbs1">✦</span>
+        <span class="mem-bg-star mbs2">★</span>
+        <span class="mem-bg-star mbs3">✦</span>
+        <span class="mem-bg-star mbs4">★</span>
+        <span class="mem-bg-star mbs5">✦</span>
+        <span class="mem-bg-star mbs6">★</span>
+        <span class="mem-bg-star mbs7">✦</span>
+        <span class="mem-bg-star mbs8">★</span>
+        <span class="mem-bg-star mbs9">✦</span>
+        <span class="mem-bg-star mbs10">★</span>
+      </div>
+
+      <div class="memories-board-container" id="memories-board-container">
+        <!-- Close Button -->
+        <button class="memories-board-close" onclick="closeMemoriesModal()" title="Close Memories">✕</button>
+
+        <!-- Scrapbook Letter Cutout Tiles: M E M O R I E S -->
+        <div class="scrapbook-title-row">
+          <div class="letter-tile lt-1"><span>M</span></div>
+          <div class="letter-tile lt-2"><span>E</span></div>
+          <div class="letter-tile lt-3"><span>M</span></div>
+          <div class="letter-tile lt-4"><span>O</span></div>
+          <div class="letter-tile lt-5"><span>R</span></div>
+          <div class="letter-tile lt-6"><span>I</span></div>
+          <div class="letter-tile lt-7"><span>E</span></div>
+          <div class="letter-tile lt-8"><span>S</span></div>
+          <span class="title-sparkle-star">✦</span>
+        </div>
+
+        <!-- Clothesline Garland Stage -->
+        <div class="clothesline-stage">
+          <!-- Fairy Lights Hanging Wire SVG with glowing light bulbs -->
+          <svg class="clothesline-wire-svg" viewBox="0 0 1200 80" preserveAspectRatio="none">
+            <path d="M 0,22 Q 300,52 600,26 Q 900,52 1200,22" fill="none" stroke="#6d4c41" stroke-width="2.5" />
+            <!-- Glowing hanging bulbs along the wire -->
+            <g class="wire-bulb" transform="translate(130, 36)">
+              <rect x="-2" y="-12" width="4" height="6" fill="#3e2723" />
+              <circle cx="0" cy="0" r="9" fill="#ffee58" opacity="0.95" />
+              <circle cx="0" cy="0" r="15" fill="#ffd54f" opacity="0.3" />
+            </g>
+            <g class="wire-bulb" transform="translate(370, 46)">
+              <rect x="-2" y="-12" width="4" height="6" fill="#3e2723" />
+              <circle cx="0" cy="0" r="9" fill="#ffee58" opacity="0.95" />
+              <circle cx="0" cy="0" r="15" fill="#ffd54f" opacity="0.3" />
+            </g>
+            <g class="wire-bulb" transform="translate(610, 34)">
+              <rect x="-2" y="-12" width="4" height="6" fill="#3e2723" />
+              <circle cx="0" cy="0" r="9" fill="#ffee58" opacity="0.95" />
+              <circle cx="0" cy="0" r="15" fill="#ffd54f" opacity="0.3" />
+            </g>
+            <g class="wire-bulb" transform="translate(850, 46)">
+              <rect x="-2" y="-12" width="4" height="6" fill="#3e2723" />
+              <circle cx="0" cy="0" r="9" fill="#ffee58" opacity="0.95" />
+              <circle cx="0" cy="0" r="15" fill="#ffd54f" opacity="0.3" />
+            </g>
+            <g class="wire-bulb" transform="translate(1070, 30)">
+              <rect x="-2" y="-12" width="4" height="6" fill="#3e2723" />
+              <circle cx="0" cy="0" r="9" fill="#ffee58" opacity="0.95" />
+              <circle cx="0" cy="0" r="15" fill="#ffd54f" opacity="0.3" />
+            </g>
+          </svg>
+
+          <!-- Horizontal Clothesline Photos Track -->
+          <div class="clothesline-photos-track" id="clothesline-photos-track">
+            
+            <!-- Photo 1: Anya Birthday Cake -->
+            <div class="hanging-polaroid-item tilt-left" onclick="focusHangingPhoto(this)">
+              <div class="wooden-clothespin">
+                <span class="peg-slit"></span>
+                <span class="peg-spring"></span>
+              </div>
+              <div class="gingham-frame">
+                <div class="photo-inner-box">
+                  <img src="assets/memory1.jpg" alt="Anya with Birthday Cake" />
+                </div>
+                <div class="photo-caption-tag">Waku Waku Cake! 🎂</div>
+              </div>
+            </div>
+
+            <!-- Red Bow Deco -->
+            <div class="line-deco-element bow-deco">🎀</div>
+
+            <!-- Photo 2: Anya Smug Heh Face -->
+            <div class="hanging-polaroid-item tilt-right" onclick="focusHangingPhoto(this)">
+              <div class="wooden-clothespin">
+                <span class="peg-slit"></span>
+                <span class="peg-spring"></span>
+              </div>
+              <div class="gingham-frame">
+                <div class="photo-inner-box">
+                  <img src="assets/memory2.jpg" alt="Anya Smug Heh Face" />
+                </div>
+                <div class="photo-caption-tag">Heh! Peanuts & Gift 🎁</div>
+              </div>
+            </div>
+
+            <!-- Red Hibiscus Flower Deco -->
+            <div class="line-deco-element flower-deco">🌺</div>
+
+            <!-- Photo 3: Anya with Chimera & Balloons -->
+            <div class="hanging-polaroid-item tilt-straight" onclick="focusHangingPhoto(this)">
+              <div class="wooden-clothespin">
+                <span class="peg-slit"></span>
+                <span class="peg-spring"></span>
+              </div>
+              <div class="gingham-frame">
+                <div class="photo-inner-box">
+                  <img src="assets/memory3.jpg" alt="Anya with Chimera Plushie" />
+                </div>
+                <div class="photo-caption-tag">Best Friend Chimera! 🎈</div>
+              </div>
+            </div>
+
+            <!-- Red Bow Deco -->
+            <div class="line-deco-element bow-deco">🎀</div>
+
+            <!-- Photo 4: Anya Blowing Birthday Candles -->
+            <div class="hanging-polaroid-item tilt-left" onclick="focusHangingPhoto(this)">
+              <div class="wooden-clothespin">
+                <span class="peg-slit"></span>
+                <span class="peg-spring"></span>
+              </div>
+              <div class="gingham-frame">
+                <div class="photo-inner-box">
+                  <img src="assets/memory4.jpg" alt="Anya Blowing Out Candles" />
+                </div>
+                <div class="photo-caption-tag">Make A Wish 🕯️✨</div>
+              </div>
+            </div>
+
+            <!-- Red Hibiscus Flower Deco -->
+            <div class="line-deco-element flower-deco">🌺</div>
+
+            <!-- Photo 5: Anya Secret Spy with Bond -->
+            <div class="hanging-polaroid-item tilt-right" onclick="focusHangingPhoto(this)">
+              <div class="wooden-clothespin">
+                <span class="peg-slit"></span>
+                <span class="peg-spring"></span>
+              </div>
+              <div class="gingham-frame">
+                <div class="photo-inner-box">
+                  <img src="assets/memory5.jpg" alt="Anya and Bond Dog" />
+                </div>
+                <div class="photo-caption-tag">Secret Agent Anya & Bond 🐶</div>
+              </div>
+            </div>
+
+          </div>
+
+          <!-- Vintage Retro Camera in Bottom-Left Corner (Matching Reference) -->
+          <div class="vintage-camera-deco" title="Vintage Memories Camera">
+            <svg class="camera-svg" viewBox="0 0 100 80" width="82" height="65">
+              <rect x="5" y="20" width="90" height="55" rx="8" fill="#ded5c4" stroke="#795548" stroke-width="2.5"/>
+              <rect x="5" y="32" width="90" height="12" fill="#4e342e"/>
+              <rect x="22" y="10" width="22" height="10" rx="3" fill="#795548"/>
+              <circle cx="75" cy="14" r="5" fill="#d32f2f"/>
+              <circle cx="50" cy="48" r="21" fill="#37474f" stroke="#efebe9" stroke-width="3"/>
+              <circle cx="50" cy="48" r="13" fill="#212121"/>
+              <circle cx="45" cy="44" r="4.5" fill="#ffffff" opacity="0.6"/>
+              <rect x="68" y="24" width="18" height="11" rx="2" fill="#fff9c4" stroke="#795548" stroke-width="1.5"/>
+            </svg>
+          </div>
+
+          <!-- Horizontal Scroll Navigation Arrow Button (Matching '>' on reference right edge) -->
+          <button class="track-arrow-btn arrow-prev" onclick="scrollClothesline(-1)" title="Scroll Left">❮</button>
+          <button class="track-arrow-btn arrow-next" onclick="scrollClothesline(1)" title="Scroll Right">❯</button>
+        </div>
+
+        <!-- Footer Hint -->
+        <div class="clothesline-footer-hint">
+          <span>🌸 Tap any photo to see it sway, or use ❮ ❯ arrows to view all memories 🌸</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Special Box 2: Make A Wish - Interactive Cake Cutting Modal (Exact Match to User Reference) -->
+    <div id="cake-modal" class="gift-modal cake-screen-overlay hidden">
+      <div class="cake-modal-backdrop" onclick="closeCakeModal()">
+        <!-- Sprinkled Pastel Stars in Background -->
+        <span class="cake-bg-star cks1">✦</span>
+        <span class="cake-bg-star cks2">★</span>
+        <span class="cake-bg-star cks3">✦</span>
+        <span class="cake-bg-star cks4">★</span>
+        <span class="cake-bg-star cks5">✦</span>
+      </div>
+
+      <div class="cake-card-container" id="cake-card-container">
+        <!-- Close Button -->
+        <button class="cake-card-close" onclick="closeCakeModal()" title="Close">✕</button>
+
+        <!-- Interactive Stage: 1:1 Match to User's Reference Screenshot -->
+        <div class="cake-interactive-stage" id="cake-stage" onclick="makeCakeWish(event)">
+          
+          <div class="cake-svg-wrap" id="cake-svg-wrap">
+            <svg class="cake-svg" viewBox="0 0 920 580" preserveAspectRatio="xMidYMid meet">
+              <defs>
+                <!-- Red-and-White Gingham Checkerboard Pattern -->
+                <pattern id="gingham-pattern" width="24" height="24" patternUnits="userSpaceOnUse">
+                  <rect width="24" height="24" fill="#ffffff"/>
+                  <rect width="12" height="12" fill="#c62828" opacity="0.9"/>
+                  <rect x="12" y="12" width="12" height="12" fill="#c62828" opacity="0.9"/>
+                  <rect x="12" y="0" width="12" height="12" fill="#ef9a9a" opacity="0.6"/>
+                  <rect x="0" y="12" width="12" height="12" fill="#ef9a9a" opacity="0.6"/>
+                </pattern>
+
+                <!-- Candle Glow Filter -->
+                <filter id="glow-candle" x="-50%" y="-50%" width="200%" height="200%">
+                  <feGaussianBlur stdDeviation="6" result="blur"/>
+                  <feMerge>
+                    <feMergeNode in="blur"/>
+                    <feMergeNode in="SourceGraphic"/>
+                  </feMerge>
+                </filter>
+                <radialGradient id="halo-glow" cx="50%" cy="50%" r="50%">
+                  <stop offset="0%" stop-color="#fff9c4" stop-opacity="0.9"/>
+                  <stop offset="45%" stop-color="#ffe082" stop-opacity="0.45"/>
+                  <stop offset="100%" stop-color="#ffecb3" stop-opacity="0"/>
+                </radialGradient>
+
+                <!-- Reusable Candle Stick & Flame Definitions -->
+                <g id="candle-stick-asset">
+                  <rect x="-6.5" y="0" width="13" height="56" rx="2" fill="#961724" stroke="#7a0e19" stroke-width="1.5" />
+                  <ellipse cx="0" cy="0" rx="6.5" ry="2.5" fill="#f8bbd0" />
+                  <line x1="0" y1="0" x2="0" y2="-10" stroke="#212121" stroke-width="2" stroke-linecap="round" />
+                </g>
+                <g id="candle-flame-asset">
+                  <circle cx="0" cy="-12" r="16" fill="#fff59d" opacity="0.45" filter="url(#glow-candle)" />
+                  <path d="M 0,-26 C 6,-16 6,-3 0,0 C -6,-3 -6,-16 0,-26 Z" fill="#ffca28" />
+                  <path d="M 0,-20 C 4.5,-12 4.5,-2 0,0 C -4.5,-2 -4.5,-12 0,-20 Z" fill="#ff5722" />
+                  <path d="M 0,-14 C 2.5,-8 2.5,-1 0,0 C -2.5,-1 -2.5,-8 0,-14 Z" fill="#ffffff" />
+                </g>
+                <linearGradient id="biscuit-tier" x1="0%" y1="0%" x2="100%" y2="0%">
+                  <stop offset="0%" stop-color="#dccfc5"/><stop offset="30%" stop-color="#eee5dc"/><stop offset="70%" stop-color="#d8cbc0"/><stop offset="100%" stop-color="#c5b7ab"/>
+                </linearGradient>
+              </defs>
+
+              <!-- Main Canvas Background -->
+              <rect x="0" y="0" width="920" height="580" rx="20" fill="#fdfaf7" />
+
+              <!-- Right & Bottom Gingham Check Border (Matching Reference) -->
+              <rect x="874" y="0" width="46" height="580" fill="url(#gingham-pattern)" />
+              <line x1="874" y1="0" x2="874" y2="580" stroke="#b71c1c" stroke-width="2" />
+              <rect x="670" y="554" width="250" height="26" fill="url(#gingham-pattern)" />
+              <line x1="670" y1="554" x2="874" y2="554" stroke="#b71c1c" stroke-width="2" />
+
+              <!-- Curved Arched Top Title: MAKE A WISH (Exact Reference) -->
+              <path id="curve-make-wish" d="M 120,118 Q 460,32 800,118" fill="none" />
+              <text>
+                <textPath id="cake-arch-text" href="#curve-make-wish" startOffset="50%" text-anchor="middle" fill="#9b1424" stroke="#7e0d1b" stroke-width="2" font-family="'Chewy', 'Lilita One', 'Fredoka', cursive, sans-serif" font-size="68" font-weight="900" letter-spacing="4">
+                  MAKE A WISH
+                </textPath>
+              </text>
+
+              <!-- Left Side: "i love you" & Confetti Streamers (Exact Reference) -->
+              <g class="left-doodle-group" transform="translate(105, 305) rotate(-18)">
+                <text x="0" y="0" fill="#9c1424" font-family="'Chewy', 'Fredoka', cursive, sans-serif" font-size="36" font-weight="bold">i love</text>
+                <text x="18" y="42" fill="#9c1424" font-family="'Chewy', 'Fredoka', cursive, sans-serif" font-size="38" font-weight="bold">y o u</text>
+              </g>
+              <g class="confetti-streamers">
+                <path d="M 35,270 Q 55,290 30,315 T 45,360" fill="none" stroke="#ef5350" stroke-width="3" stroke-linecap="round"/>
+                <path d="M 65,420 Q 90,405 80,445 T 105,475" fill="none" stroke="#ff4081" stroke-width="3" stroke-linecap="round"/>
+                <path d="M 40,490 Q 60,470 50,510 T 80,530" fill="none" stroke="#ab47bc" stroke-width="3" stroke-linecap="round"/>
+                <text x="40" y="465" fill="#fbc02d" font-size="28">✦</text>
+                <text x="145" y="525" fill="#ffa726" font-size="22">★</text>
+              </g>
+
+              <!-- Top Right: Dangling "CLICK ME" Heart Tag (Exact Reference) -->
+              <path d="M 855,0 Q 852,35 858,68" stroke="#f48fb1" stroke-width="2.5" stroke-dasharray="4,4" fill="none"/>
+              <g class="click-me-heart-badge" transform="translate(858, 88)" onclick="makeCakeWish(event)" cursor="pointer">
+                <path d="M 0,16 C 0,16 -28,-8 -28,-22 C -28,-34 -14,-38 0,-26 C 14,-38 28,-34 28,-22 C 28,-8 0,16 0,16 Z" fill="#ffebee" stroke="#c2185b" stroke-width="2.5"/>
+                <text x="0" y="-20" text-anchor="middle" fill="#9c1424" font-family="'Chewy', 'Fredoka', cursive" font-size="11" font-weight="bold">CLICK</text>
+                <text x="0" y="-7" text-anchor="middle" fill="#9c1424" font-family="'Chewy', 'Fredoka', cursive" font-size="11" font-weight="bold">ME</text>
+              </g>
+
+              <!-- Warm Candle Row Ambient Halo -->
+              <ellipse cx="450" cy="145" rx="200" ry="60" fill="url(#halo-glow)" />
+
+              <!-- 2-TIER CAKE MAIN GROUP (Matching Reference Exact Shapes & Colors) -->
+              <g id="two-tier-cake-group">
+                
+                <!-- === BOTTOM TIER === -->
+                <g class="bottom-tier-cake">
+                  <!-- Biscuit Sponge Body -->
+                  <path d="M 220,340 L 220,470 Q 450,520 680,470 L 680,340 Z" fill="url(#biscuit-tier)" />
+                  <!-- Bottom Left Red Corner Shadow Accent (Matching Reference) -->
+                  <path d="M 220,380 C 220,440 240,480 270,490 L 260,380 Z" fill="#b71c1c" opacity="0.85" />
+                  <!-- Bottom Red Plate/Icing Stripe Accent -->
+                  <path d="M 240,475 Q 450,528 660,475" stroke="#961724" stroke-width="7" stroke-linecap="round" fill="none" />
+                  
+                  <!-- White Dripping Frosting -->
+                  <ellipse cx="450" cy="350" rx="230" ry="46" fill="#ffffff" />
+                  <path d="M 220,340 
+                           C 240,395 265,440 290,440 
+                           C 310,440 320,385 340,385 
+                           C 365,385 375,465 400,465 
+                           C 425,465 435,395 460,395 
+                           C 485,395 495,465 520,465 
+                           C 545,465 555,395 580,395 
+                           C 605,395 620,440 640,440 
+                           C 660,440 680,395 680,340 
+                           Q 450,305 220,340 Z" 
+                        fill="#ffffff" />
+                  
+                  <!-- Red Wavy Contour Line Beneath Drips (Exact Reference) -->
+                  <path d="M 220,355 
+                           C 235,415 270,448 300,448 
+                           C 330,448 345,398 375,398 
+                           C 405,398 420,472 450,472 
+                           C 480,472 495,402 525,402 
+                           C 555,402 575,468 605,468 
+                           C 630,468 665,420 680,355" 
+                        fill="none" stroke="#961724" stroke-width="7" stroke-linecap="round" stroke-linejoin="round"/>
+                  
+                  <!-- Cocoa / Strawberry Oval Sprinkles -->
+                  <ellipse cx="265" cy="465" rx="9" ry="4.5" fill="#6d4c41" transform="rotate(-15 265 465)" />
+                  <ellipse cx="360" cy="492" rx="9" ry="4.5" fill="#6d4c41" transform="rotate(25 360 492)" />
+                  <ellipse cx="450" cy="510" rx="9" ry="4.5" fill="#6d4c41" transform="rotate(-8 450 510)" />
+                  <ellipse cx="550" cy="500" rx="9" ry="4.5" fill="#6d4c41" transform="rotate(18 550 500)" />
+                  <ellipse cx="640" cy="460" rx="8" ry="4" fill="#6d4c41" transform="rotate(-20 640 460)" />
+                  <ellipse cx="340" cy="365" rx="7" ry="3.5" fill="#a1887f" transform="rotate(22 340 365)" />
+                  <ellipse cx="560" cy="368" rx="7" ry="3.5" fill="#a1887f" transform="rotate(-16 560 368)" />
+                </g>
+
+                <!-- === TOP TIER === -->
+                <g class="top-tier-cake">
+                  <!-- Biscuit Sponge Body -->
+                  <path d="M 280,225 L 280,330 Q 450,365 620,330 L 620,225 Z" fill="url(#biscuit-tier)" />
+                  
+                  <!-- White Dripping Frosting -->
+                  <ellipse cx="450" cy="225" rx="170" ry="36" fill="#ffffff" />
+                  <!-- Top Frosting Contour Shading -->
+                  <path d="M 320,230 Q 450,255 580,230" fill="none" stroke="#d5c8be" stroke-width="4" stroke-linecap="round" />
+                  
+                  <path d="M 280,225 
+                           C 290,265 315,290 335,290 
+                           C 355,290 365,255 385,255 
+                           C 405,255 415,305 440,305 
+                           C 465,305 475,260 495,260 
+                           C 515,260 525,300 545,300 
+                           C 565,300 575,255 595,255 
+                           C 608,255 620,245 620,225 
+                           Q 450,195 280,225 Z" 
+                        fill="#ffffff" />
+                  
+                  <!-- Red Wavy Contour Line Beneath Drips (Exact Reference) -->
+                  <path d="M 280,238 
+                           C 295,275 325,295 350,295 
+                           C 375,295 385,260 410,260 
+                           C 435,260 445,308 470,308 
+                           C 495,308 505,262 530,262 
+                           C 555,262 570,300 595,300 
+                           C 610,300 620,275 620,238" 
+                        fill="none" stroke="#961724" stroke-width="6" stroke-linecap="round" stroke-linejoin="round"/>
+                  
+                  <!-- Cocoa Sprinkles on Top Tier -->
+                  <ellipse cx="330" cy="325" rx="8" ry="4" fill="#6d4c41" transform="rotate(-15 330 325)" />
+                  <ellipse cx="400" cy="342" rx="7" ry="3.5" fill="#6d4c41" transform="rotate(20 400 342)" />
+                  <ellipse cx="480" cy="348" rx="8" ry="4" fill="#6d4c41" transform="rotate(-10 480 348)" />
+                  <ellipse cx="560" cy="335" rx="7" ry="3.5" fill="#6d4c41" transform="rotate(25 560 335)" />
+                  <ellipse cx="360" cy="245" rx="6" ry="3" fill="#a1887f" transform="rotate(30 360 245)" />
+                  <ellipse cx="540" cy="248" rx="6" ry="3" fill="#a1887f" transform="rotate(-20 540 248)" />
+                </g>
+              </g>
+
+              <!-- === 7 RED CANDLES (Optimized via SVG defs) === -->
+              <g class="candles-row-group">
+                <g class="candle-item" id="candle-1" onclick="blowCandle(1, event)" transform="translate(320, 168)"><use href="#candle-stick-asset"/><g transform="translate(0, -10)"><g class="flame-wrap" id="flame-1"><use href="#candle-flame-asset"/></g></g></g>
+                <g class="candle-item" id="candle-2" onclick="blowCandle(2, event)" transform="translate(365, 164)"><use href="#candle-stick-asset"/><g transform="translate(0, -10)"><g class="flame-wrap" id="flame-2"><use href="#candle-flame-asset"/></g></g></g>
+                <g class="candle-item" id="candle-3" onclick="blowCandle(3, event)" transform="translate(410, 161)"><use href="#candle-stick-asset"/><g transform="translate(0, -10)"><g class="flame-wrap" id="flame-3"><use href="#candle-flame-asset"/></g></g></g>
+                <g class="candle-item" id="candle-4" onclick="blowCandle(4, event)" transform="translate(450, 159)"><use href="#candle-stick-asset"/><g transform="translate(0, -10)"><g class="flame-wrap" id="flame-4"><use href="#candle-flame-asset"/></g></g></g>
+                <g class="candle-item" id="candle-5" onclick="blowCandle(5, event)" transform="translate(495, 161)"><use href="#candle-stick-asset"/><g transform="translate(0, -10)"><g class="flame-wrap" id="flame-5"><use href="#candle-flame-asset"/></g></g></g>
+                <g class="candle-item" id="candle-6" onclick="blowCandle(6, event)" transform="translate(535, 164)"><use href="#candle-stick-asset"/><g transform="translate(0, -10)"><g class="flame-wrap" id="flame-6"><use href="#candle-flame-asset"/></g></g></g>
+                <g class="candle-item" id="candle-7" onclick="blowCandle(7, event)" transform="translate(580, 168)"><use href="#candle-stick-asset"/><g transform="translate(0, -10)"><g class="flame-wrap" id="flame-7"><use href="#candle-flame-asset"/></g></g></g>
+              </g>
+
+              <!-- === SHINCHAN WITH BALLOONS ON THE RIGHT (Exact Reference) === -->
+              <g class="shinchan-balloons-group" transform="translate(735, 230)">
+                <!-- Balloons -->
+                <g class="balloons-floating">
+                  <!-- Blue Balloon -->
+                  <g transform="translate(15, 65)">
+                    <path d="M 0,0 C -18,-2 0,-36 12,-38 C 24,-40 38,-15 28,5 C 24,12 10,14 0,0 Z" fill="#4fc3f7" stroke="#29b6f6" stroke-width="1.2"/>
+                    <ellipse cx="8" cy="-22" rx="4" ry="9" fill="#ffffff" opacity="0.6" transform="rotate(-25 8 -22)"/>
+                    <polygon points="0,0 -3,4 3,4" fill="#0288d1"/>
+                    <path d="M 0,4 Q 25,60 55,145" fill="none" stroke="#90a4ae" stroke-width="1.2"/>
+                  </g>
+                  
+                  <!-- Pink Heart Balloon (Top) -->
+                  <g transform="translate(48, 30)">
+                    <path d="M 0,0 C 0,0 -32,-24 -32,-42 C -32,-56 -16,-62 0,-48 C 16,-62 32,-56 32,-42 C 32,-24 0,0 0,0 Z" fill="#f06292" stroke="#e91e63" stroke-width="1.2"/>
+                    <ellipse cx="-14" cy="-44" rx="4" ry="8" fill="#ffffff" opacity="0.55" transform="rotate(-30 -14 -44)"/>
+                    <polygon points="0,0 -3,5 3,5" fill="#d81b60"/>
+                    <path d="M 0,5 Q 15,65 22,180" fill="none" stroke="#90a4ae" stroke-width="1.2"/>
+                  </g>
+                </g>
+
+                <!-- Shinchan Mascot Figure -->
+                <g class="shinchan-mascot-svg" transform="translate(20, 185)">
+                  <!-- Legs & Shoes -->
+                  <rect x="22" y="112" width="10" height="20" fill="#ffffff" stroke="#212121" stroke-width="2.5"/>
+                  <rect x="42" y="112" width="10" height="20" fill="#ffffff" stroke="#212121" stroke-width="2.5"/>
+                  <ellipse cx="24" cy="132" rx="9" ry="5.5" fill="#ffd54f" stroke="#212121" stroke-width="2.5"/>
+                  <ellipse cx="48" cy="132" rx="9" ry="5.5" fill="#ffd54f" stroke="#212121" stroke-width="2.5"/>
+
+                  <!-- Yellow Shorts -->
+                  <path d="M 12,86 L 62,86 L 58,114 L 38,114 L 37,100 L 36,114 L 16,114 Z" fill="#cddc39" stroke="#212121" stroke-width="2.5" stroke-linejoin="round"/>
+
+                  <!-- Red T-Shirt -->
+                  <path d="M 8,48 Q 36,44 66,48 L 62,88 L 12,88 Z" fill="#e53935" stroke="#212121" stroke-width="2.5" stroke-linejoin="round"/>
+
+                  <!-- Right Arm holding head shyly -->
+                  <path d="M 64,52 C 78,42 82,24 68,14 C 64,18 64,28 58,35" fill="#ffe0b2" stroke="#212121" stroke-width="2.5" stroke-linecap="round"/>
+                  <!-- Left Arm holding balloon string -->
+                  <path d="M 10,54 Q -6,45 8,25" fill="#ffe0b2" stroke="#212121" stroke-width="2.5" stroke-linecap="round"/>
+
+                  <!-- Shinchan Chubby Head -->
+                  <path d="M 22,12 C 10,12 4,22 4,32 C 4,44 14,50 26,50 C 38,50 68,44 68,26 C 68,14 44,12 22,12 Z" fill="#ffe0b2" stroke="#212121" stroke-width="2.5"/>
+                  <!-- Black Hair -->
+                  <path d="M 12,24 C 6,18 10,10 24,10 C 38,10 65,12 66,22 C 68,14 55,6 30,6 C 16,6 4,14 12,24 Z" fill="#212121"/>
+                  <!-- Ear -->
+                  <ellipse cx="64" cy="28" rx="5" ry="6" fill="#ffe0b2" stroke="#212121" stroke-width="2"/>
+
+                  <!-- Iconic Thick Eyebrows -->
+                  <path d="M 18,17 Q 26,14 34,18" fill="none" stroke="#212121" stroke-width="4.5" stroke-linecap="round"/>
+                  <path d="M 40,17 Q 48,14 56,19" fill="none" stroke="#212121" stroke-width="4.5" stroke-linecap="round"/>
+
+                  <!-- Big Eyes -->
+                  <ellipse cx="28" cy="26" rx="4" ry="5.5" fill="#212121"/>
+                  <circle cx="27" cy="24" r="1.5" fill="#ffffff"/>
+                  <ellipse cx="46" cy="27" rx="4" ry="5.5" fill="#212121"/>
+                  <circle cx="45" cy="25" r="1.5" fill="#ffffff"/>
+
+                  <!-- Cute Blushing Cheeks -->
+                  <ellipse cx="14" cy="36" rx="5" ry="3" fill="#ff8a80" opacity="0.8"/>
+                  <ellipse cx="56" cy="36" rx="4.5" ry="3" fill="#ff8a80" opacity="0.8"/>
+                  <line x1="12" y1="34" x2="16" y2="38" stroke="#d32f2f" stroke-width="1.5" stroke-linecap="round"/>
+                  <line x1="54" y1="34" x2="58" y2="38" stroke="#d32f2f" stroke-width="1.5" stroke-linecap="round"/>
+
+                  <!-- Smile Mouth -->
+                  <path d="M 32,38 Q 38,44 44,38" fill="none" stroke="#212121" stroke-width="2" stroke-linecap="round"/>
+                </g>
+              </g>
+
+            </svg>
+          </div>
+        </div>
+
+        <!-- Wish Celebration Ribbon (Integrated at bottom, never blocks the cake) -->
+        <div id="cake-wish-banner" class="cake-wish-banner hidden">
+          <div class="wish-ribbon-card">
+            <p class="wish-main-text">🎉 "May your year be as sweet, bright, and delightful as this birthday cake! All your dreams will come true!" 💖🍰✨</p>
+            <div class="wish-buttons-row">
+              <button class="cake-btn-again" onclick="resetCake()">🕯️ Relight Candles</button>
+              <button class="cake-btn-back" onclick="closeCakeModal()">💖 Back to Gifts</button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Footer Hint -->
+        <div class="cake-footer-hint" id="cake-footer-hint">
+          <span>🕯️ Tap any candle to blow it out, or tap the cake / "CLICK ME" tag to make a wish! 🎂</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Special Box 3: Love & Birthday Letter Modal (Matching User Reference Image) -->
+    <div id="letter-modal" class="gift-modal letter-screen-overlay hidden" onclick="handleLetterOverlayClick(event)">
+      <!-- Sprinkled Pastel Twinkling Stars in Background (matching passcode screen aesthetic) -->
+      <div class="letter-bg-backdrop">
+        <span class="letter-bg-star lbs1">✦</span>
+        <span class="letter-bg-star lbs2">★</span>
+        <span class="letter-bg-star lbs3">✦</span>
+        <span class="letter-bg-star lbs4">★</span>
+        <span class="letter-bg-star lbs5">✦</span>
+        <span class="letter-bg-star lbs6">★</span>
+        <span class="letter-bg-star lbs7">✦</span>
+        <span class="letter-bg-star lbs8">★</span>
+        <span class="letter-bg-star lbs9">✦</span>
+        <span class="letter-bg-star lbs10">★</span>
+        <span class="letter-bg-star lbs11">✦</span>
+        <span class="letter-bg-star lbs12">★</span>
+      </div>
+
+      <!-- Top Right "back" Button (Matching Screenshot) -->
+      <button class="letter-back-btn" onclick="closeLetterModal()" title="Back to gifts">back</button>
+
+      <!-- Letter Content Container (2-Column Landscape Card) -->
+      <div class="letter-card-container animate-letter">
+        <!-- Left Side: Tilted Checkered Photo Frame with Purple Ribbon Bow -->
+        <div class="letter-photo-column">
+          <div class="letter-polaroid-frame">
+            <!-- Gingham / Mosaic Checkered Border Wrapper -->
+            <div class="letter-gingham-wrap">
+              <div class="letter-photo-inner">
+                <img src="assets/memory1.jpg" alt="Anya Birthday Celebration" class="letter-photo-img" />
+              </div>
+            </div>
+
+            <!-- Purple Ribbon Bow in Bottom-Left Corner (Exact Match to Screenshot) -->
+            <div class="letter-purple-bow" aria-hidden="true">
+              <svg viewBox="0 0 130 130" class="bow-svg">
+                <defs>
+                  <filter id="bow-shadow" x="-30%" y="-30%" width="160%" height="160%">
+                    <feDropShadow dx="-2" dy="4" stdDeviation="3" flood-color="#210535" flood-opacity="0.45" />
+                  </filter>
+                  <linearGradient id="bow-grad-left" x1="0%" y1="0%" x2="100%" y2="100%">
+                    <stop offset="0%" stop-color="#7e32b3" />
+                    <stop offset="100%" stop-color="#551d7a" />
+                  </linearGradient>
+                  <linearGradient id="bow-grad-right" x1="0%" y1="0%" x2="100%" y2="100%">
+                    <stop offset="0%" stop-color="#8a39c4" />
+                    <stop offset="100%" stop-color="#5b2084" />
+                  </linearGradient>
+                  <linearGradient id="bow-grad-tail" x1="0%" y1="0%" x2="100%" y2="100%">
+                    <stop offset="0%" stop-color="#64248f" />
+                    <stop offset="100%" stop-color="#441460" />
+                  </linearGradient>
+                </defs>
+                <g filter="url(#bow-shadow)">
+                  <!-- Hanging Ribbon Tails -->
+                  <path d="M 48,58 C 36,75 22,95 14,118 C 22,112 28,110 36,116 C 42,95 48,78 52,62 Z" fill="url(#bow-grad-tail)" />
+                  <path d="M 54,60 C 44,80 38,98 34,122 C 42,114 50,114 56,118 C 58,96 58,78 58,62 Z" fill="url(#bow-grad-tail)" opacity="0.9" />
+                  
+                  <!-- Left Ribbon Loop -->
+                  <path d="M 48,54 C 22,44 2,36 4,52 C 6,68 30,66 48,58 Z" fill="url(#bow-grad-left)" />
+                  <path d="M 47,54 C 28,47 16,44 16,53 C 16,62 34,61 47,56 Z" fill="#4a176b" />
+
+                  <!-- Right Ribbon Loop -->
+                  <path d="M 56,54 C 82,38 102,42 100,58 C 98,72 74,68 56,60 Z" fill="url(#bow-grad-right)" />
+                  <path d="M 57,54 C 76,43 88,47 88,56 C 88,64 70,63 57,58 Z" fill="#4f1972" />
+
+                  <!-- Center Knot -->
+                  <ellipse cx="52" cy="56" rx="9" ry="8" fill="#501a73" />
+                  <ellipse cx="51" cy="55" rx="6" ry="5" fill="#752ca6" />
+                  <path d="M 47,52 Q 52,49 57,52 Q 54,61 47,59 Z" fill="#8c3ac7" opacity="0.6" />
+                </g>
+              </svg>
+            </div>
+          </div>
+        </div>
+
+        <!-- Right Side: Heartfelt Birthday / Love Letter Text -->
+        <div class="letter-text-column" onclick="skipLetterTypewriter()" title="Click to reveal instantly">
+          <div class="letter-content-body">
+            <h2 class="letter-headline" id="letter-headline-el">Happy birthday to my favourite<br>person! ❤️</h2>
+            
+            <p class="letter-para letter-p1" id="letter-p1-el">
+              I hope this year brings you everything you've been wishing for and so much more. Thank you for making my days happier, my bad days easier, and my life a little more beautiful just by being in it. 🥺💖
+            </p>
+            
+            <p class="letter-para letter-p2" id="letter-p2-el">
+              I'm so lucky to have you, and I can't wait to make a million more memories with you. Here's to you, your dreams, and all the happiness you deserve.
+            </p>
+            
+            <p class="letter-para letter-closing" id="letter-closing-el">
+              Happy birthday, my love. I love you more than you know. 🫶🏻🎂❤️
+            </p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Generic Gift Reveal Modal Popup (For other boxes) -->
+    <div id="gift-modal" class="gift-modal hidden">
+      <div class="gift-modal-card" id="gift-modal-card">
+        <button class="modal-close-btn" onclick="closeGiftModal()">✕</button>
+        <div class="gift-modal-icon" id="gift-modal-icon">🎁</div>
+        <h3 class="gift-modal-title" id="gift-modal-title">Mystery Gift Unlocked!</h3>
+        <p class="gift-modal-desc" id="gift-modal-desc">Special birthday surprise revealed!</p>
+        <button class="modal-action-btn" onclick="closeGiftModal()">Keep Exploring 💖</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Stage Curtains (Full Screen Top-to-Bottom Red Velvet) -->
+  <div id="curtain-left"><div class="fabric"></div></div>
+  <div id="curtain-right"><div class="fabric"></div></div>
+
+  <!-- Stage Clock (Initial Screen) -->
+  <div id="countdown-wrap">
+    <div class="clock-housing">
+      <div class="clock-dial-wrap">
+        <svg class="clock-svg" viewBox="0 0 280 280">
+          <circle cx="140" cy="140" r="135" fill="none" stroke="#ffd700" stroke-width="3"/>
+          <circle cx="140" cy="140" r="128" fill="#1e031a" stroke="#ffd700" stroke-width="1.2" stroke-dasharray="2,4" opacity=".8"/>
+          <g id="clock-ticks" stroke="#ffd700"></g>
+          <g id="clock-numerals" font-family="'Playfair Display', serif" font-size="14" font-weight="700" fill="#ffd700" text-anchor="middle" dominant-baseline="middle"></g>
+          <text x="140" y="95" font-family="'Playfair Display', serif" font-size="8.5" letter-spacing="3" fill="#f5deb3" opacity=".8" text-anchor="middle">MIDNIGHT</text>
+          <!-- Hands -->
+          <g id="hour-hand" class="hour-hand"><line x1="140" y1="140" x2="140" y2="85" stroke="#f5c842" stroke-width="4.5" stroke-linecap="round"/><path d="M140 76 L144 86 L136 86 Z" fill="#ffd700"/></g>
+          <g id="minute-hand" class="minute-hand"><line x1="140" y1="140" x2="140" y2="58" stroke="#ffd700" stroke-width="3" stroke-linecap="round"/><path d="M140 50 L143 62 L137 62 Z" fill="#ffd700"/></g>
+          <g id="second-hand" class="second-hand"><line x1="140" y1="165" x2="140" y2="42" stroke="#ff4081" stroke-width="1.6" stroke-linecap="round"/><circle cx="140" cy="155" r="3.5" fill="#ffd700"/><polygon points="140,36 142.5,45 137.5,45" fill="#ffd700"/></g>
+          <circle cx="140" cy="140" r="6.5" fill="#ffd700"/><circle cx="140" cy="140" r="2.5" fill="#8b0000"/>
+        </svg>
+        <div class="clock-glass"></div>
+      </div>
+      <div class="clock-plate">
+        <div class="plate-tag">✦ MIDNIGHT COUNTDOWN ✦</div>
+        <div class="digital-time"><span id="hh">11</span><span class="colon">:</span><span id="mm">59</span><span class="colon">:</span><span id="ss">55</span></div>
+        <div class="plate-hint">Watch the clock strike 12:00:00</div>
+      </div>
+    </div>
+  </div>
+
+  <div id="midnight-burst"></div>
+
+  <script src="script.js"></script>
 </body>
 </html>
