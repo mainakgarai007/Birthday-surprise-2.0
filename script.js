@@ -357,10 +357,10 @@ function closeCakeModal() {
 function blowCandle(num, e) {
   if (e) e.stopPropagation();
   const flame = document.getElementById(`flame-${num}`);
-  if (flame && !flame.classList.contains('extinguished')) {
+  if (flame && !flame.classList.contains('extinguished') && !isWishMade) {
     flame.classList.add('extinguished');
-    blownCandlesCount++;
-    if (blownCandlesCount >= 7) setTimeout(makeCakeWish, 300);
+    blownCandlesCount = Math.min(7, blownCandlesCount + 1);
+    if (blownCandlesCount === 7) setTimeout(makeCakeWish, 250);
   }
 }
 
@@ -761,7 +761,8 @@ startCountdown();
     try {
       const raw = new URLSearchParams(location.hash.slice(1)).get('gift');
       if (!raw) return null;
-      const base64 = raw.replace(/-/g, '+').replace(/_/g, '/');\n      const payload = JSON.parse(decodeURIComponent(escape(atob(base64))));
+      const base64 = raw.replace(/-/g, '+').replace(/_/g, '/');
+      const payload = JSON.parse(decodeURIComponent(escape(atob(base64))));
       if (!payload || payload.v !== 2 || !payload.id || !payload.passKey) return null;
       return payload;
     } catch (_) { return null; }
