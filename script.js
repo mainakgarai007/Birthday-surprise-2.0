@@ -770,9 +770,13 @@ startCountdown();
   const payload = getPayload();
   const recipientMode = Boolean(payload);
   const hideOriginalApp = () => {
-    // Hide screens with classes only. Inline display:none prevented later game
-    // screens from becoming visible when the original game's flow changed pages.
-    ['bg-ambient','quiz-screen','surprise-screen','gift-screen'].forEach(id => {
+    // Hide the entry screen initially, but do not inline-hide later screens:
+    // the game's own show-screen classes must be able to reveal them.
+    ['bg-ambient','quiz-screen'].forEach(id => {
+      const el = document.getElementById(id);
+      if (el) { el.style.display = 'none'; el.classList.add('hidden-screen'); }
+    });
+    ['surprise-screen','gift-screen'].forEach(id => {
       const el = document.getElementById(id);
       if (el) el.classList.add('hidden-screen');
     });
