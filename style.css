@@ -1731,3 +1731,8 @@ html, body {
 .welcome-popup-card { position:relative; }
 .welcome-close { position:absolute; top:12px; right:12px; width:38px; height:38px; border:1px solid #e6b5cb; border-radius:50%; background:#fff0f6; color:#792b55; font-size:1.2rem; font-weight:700; display:grid; place-items:center; cursor:pointer; box-shadow:0 3px 10px #35112c18; }
 .welcome-close:focus-visible { outline:3px solid #b52c79; outline-offset:3px; }
+
+/* Floating arrow to reopen the welcome popup */
+.welcome-open { position:fixed; right:16px; bottom:18px; z-index:9999; width:50px; height:50px; border:0; border-radius:50%; background:linear-gradient(135deg,#e64d98,#a82b75); color:#fff; font-size:2rem; font-weight:800; line-height:1; display:grid; place-items:center; cursor:pointer; box-shadow:0 7px 22px #6c214b55; transition:transform .18s ease, box-shadow .18s ease; }
+.welcome-open:hover { transform:translateY(-3px); box-shadow:0 10px 26px #6c214b66; }
+.welcome-open:focus-visible { outline:3px solid #792b55; outline-offset:4px; }
