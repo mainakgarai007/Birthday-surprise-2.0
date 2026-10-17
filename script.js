@@ -766,8 +766,10 @@ startCountdown();
   const feedbackModal = document.getElementById('feedback-modal');
   const feedbackMessage = document.getElementById('feedback-message');
   const feedbackStatus = document.getElementById('feedback-status');
-  document.getElementById('welcome-create')?.addEventListener('click', () => welcomePopup.classList.add('popup-dismissed'));
-  document.getElementById('welcome-feedback')?.addEventListener('click', () => { welcomePopup.classList.add('popup-dismissed'); feedbackModal.hidden = false; });
+  const closeWelcomePopup = () => welcomePopup?.classList.add('popup-dismissed');
+  document.getElementById('welcome-close')?.addEventListener('click', closeWelcomePopup);
+  document.getElementById('welcome-create')?.addEventListener('click', closeWelcomePopup);
+  document.getElementById('welcome-feedback')?.addEventListener('click', () => { closeWelcomePopup(); feedbackModal.hidden = false; });
   document.getElementById('feedback-close')?.addEventListener('click', () => { feedbackModal.hidden = true; });
   document.getElementById('feedback-copy')?.addEventListener('click', async () => {
     const value = feedbackMessage.value.trim();
