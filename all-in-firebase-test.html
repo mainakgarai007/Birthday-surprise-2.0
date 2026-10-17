@@ -1,0 +1,187 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#10131a">
+  <title>All-in Firebase Test</title>
+  <style>
+    :root { color-scheme: dark; --bg:#10131a; --panel:#191e29; --line:#30394a; --text:#eef2ff; --muted:#aab4c8; --accent:#8b9cff; --good:#5ee0a0; --bad:#ff8585; }
+    * { box-sizing:border-box; }
+    body { margin:0; padding:22px 14px 40px; background:radial-gradient(circle at top,#202941 0,var(--bg) 48%); color:var(--text); font:16px/1.5 system-ui,-apple-system,Segoe UI,sans-serif; }
+    main { max-width:650px; margin:0 auto; }
+    .hero,.panel { background:rgba(25,30,41,.96); border:1px solid var(--line); border-radius:18px; padding:20px; margin-bottom:14px; }
+    .eyebrow { color:var(--accent); font-weight:750; letter-spacing:.08em; font-size:.78rem; text-transform:uppercase; }
+    h1 { font-size:clamp(1.7rem,6vw,2.25rem); line-height:1.15; margin:.45rem 0 .65rem; }
+    p { margin:.45rem 0; color:var(--muted); }
+    h2 { font-size:1.08rem; margin:0 0 8px; }
+    .status { border:1px solid var(--line); border-radius:12px; padding:12px; margin-top:12px; overflow-wrap:anywhere; }
+    .status.good { border-color:#276e52; color:var(--good); }
+    .status.bad { border-color:#793e48; color:var(--bad); }
+    .uid { font: .88rem ui-monospace,SFMono-Regular,Consolas,monospace; overflow-wrap:anywhere; color:var(--text); }
+    button { width:100%; padding:13px 16px; margin-top:10px; border:0; border-radius:12px; font:700 1rem system-ui,sans-serif; cursor:pointer; background:var(--accent); color:#111629; }
+    button.secondary { background:#2b3446; color:var(--text); border:1px solid #46516a; }
+    button:disabled { opacity:.55; cursor:wait; }
+    .small { font-size:.86rem; }
+    pre { white-space:pre-wrap; overflow-wrap:anywhere; background:#0c0f15; border:1px solid var(--line); border-radius:12px; padding:12px; color:#dce5ff; min-height:48px; }
+    code { color:#dce5ff; }
+    .warn { color:#ffd58a; }
+    footer { text-align:center; color:var(--muted); font-size:.8rem; padding:8px; }
+  </style>
+</head>
+<body>
+<main>
+  <section class="hero">
+    <div class="eyebrow">Common backend • diagnostic</div>
+    <h1>All-in Firebase Test</h1>
+    <p>Test anonymous sign-in and private Firestore save/read using your Firebase project.</p>
+    <div id="status" class="status">Connecting to Firebase…</div>
+  </section>
+
+  <section class="panel">
+    <h2>1. Anonymous account</h2>
+    <p>This creates or resumes an anonymous Firebase session in this browser.</p>
+    <div><strong>UID:</strong> <span id="uid" class="uid">Not signed in</span></div>
+    <button id="signin">Sign in anonymously</button>
+  </section>
+
+  <section class="panel">
+    <h2>2. Save a test document</h2>
+    <p>Writes only to <code>users/{your-uid}/data/connectionTest</code>, matching your current Firestore rules.</p>
+    <button id="save" disabled>Save test data</button>
+    <button id="read" class="secondary" disabled>Read test data</button>
+    <div id="result"><pre>No test performed yet.</pre></div>
+  </section>
+
+  <section class="panel">
+    <h2>What a successful test means</h2>
+    <p>Anonymous sign-in works, and the current Firestore rules allow this browser session to write and read its own test document.</p>
+    <p class="warn small">Security note: your Firebase web config is designed to be used in client apps. Keep access controlled with Security Rules; never put service-account private keys or admin credentials in this file.</p>
+  </section>
+  <footer>All-in • Firebase diagnostic page</footer>
+</main>
+
+<script type="module">
+  import { initializeApp } from "https://www.gstatic.com/firebasejs/11.10.0/firebase-app.js";
+  import { getAuth, signInAnonymously, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/11.10.0/firebase-auth.js";
+  import { getFirestore, doc, setDoc, getDoc, serverTimestamp } from "https://www.gstatic.com/firebasejs/11.10.0/firebase-firestore.js";
+
+  const firebaseConfig = {
+    apiKey: "AIzaSyBdFADDci2DSbCzEOkOD3KE5YYLKxkfc60",
+    authDomain: "all-in-a5f3b.firebaseapp.com",
+    projectId: "all-in-a5f3b",
+    storageBucket: "all-in-a5f3b.firebasestorage.app",
+    messagingSenderId: "924508433076",
+    appId: "1:924508433076:web:4cd108992dbfc45b9845e1"
+  };
+
+  const $ = (id) => document.getElementById(id);
+  const statusEl = $("status");
+  const uidEl = $("uid");
+  const signinBtn = $("signin");
+  const saveBtn = $("save");
+  const readBtn = $("read");
+  let auth, db, currentUser;
+
+  function showStatus(message, type = "") {
+    statusEl.textContent = message;
+    statusEl.className = "status" + (type ? " " + type : "");
+  }
+  function showResult(message) {
+    $("result").innerHTML = "";
+    const pre = document.createElement("pre");
+    pre.textContent = message;
+    $("result").appendChild(pre);
+  }
+  function errorMessage(error) {
+    const code = error?.code ? ` (${error.code})` : "";
+    return `${error?.message || String(error)}${code}`;
+  }
+  function testDocRef() {
+    if (!currentUser) throw new Error("Please sign in anonymously first.");
+    return doc(db, "users", currentUser.uid, "data", "connectionTest");
+  }
+
+  try {
+    const app = initializeApp(firebaseConfig);
+    auth = getAuth(app);
+    db = getFirestore(app);
+    showStatus("Firebase SDK loaded. Sign in to run the test.", "good");
+  } catch (error) {
+    showStatus("Firebase initialization failed: " + errorMessage(error), "bad");
+  }
+
+  onAuthStateChanged(auth, (user) => {
+    currentUser = user;
+    uidEl.textContent = user ? user.uid : "Not signed in";
+    saveBtn.disabled = !user;
+    readBtn.disabled = !user;
+    if (user) showStatus("Signed in anonymously. You can test Firestore now.", "good");
+  });
+
+  signinBtn.addEventListener("click", async () => {
+    signinBtn.disabled = true;
+    try {
+      const credential = await signInAnonymously(auth);
+      currentUser = credential.user;
+      uidEl.textContent = currentUser.uid;
+      saveBtn.disabled = false;
+      readBtn.disabled = false;
+      showStatus("Anonymous sign-in successful.", "good");
+      showResult("Signed in. UID: " + currentUser.uid);
+    } catch (error) {
+      showStatus("Sign-in failed: " + errorMessage(error), "bad");
+      showResult("Check Firebase Console → Authentication → Sign-in method → Anonymous. Also check that the project has not exceeded its limits.");
+    } finally {
+      signinBtn.disabled = false;
+    }
+  });
+
+  saveBtn.addEventListener("click", async () => {
+    saveBtn.disabled = true;
+    try {
+      const ref = testDocRef();
+      await setDoc(ref, {
+        message: "Hello from All-in Firebase Test",
+        project: "All-in",
+        test: true,
+        updatedAt: serverTimestamp()
+      });
+      showStatus("Firestore save successful.", "good");
+      showResult("SUCCESS: test document saved.\nPath: " + ref.path + "\nNow tap “Read test data” to verify reading.");
+    } catch (error) {
+      showStatus("Firestore save failed: " + errorMessage(error), "bad");
+      showResult("Common causes:\n• Firestore Rules were not published or have not propagated yet.\n• Anonymous sign-in did not finish.\n• Network or Firebase project configuration issue.\n\nDetails: " + errorMessage(error));
+    } finally {
+      saveBtn.disabled = !currentUser;
+    }
+  });
+
+  readBtn.addEventListener("click", async () => {
+    readBtn.disabled = true;
+    try {
+      const ref = testDocRef();
+      const snapshot = await getDoc(ref);
+      if (!snapshot.exists()) {
+        showStatus("No test document found yet.", "bad");
+        showResult("No document at: " + ref.path + "\nTap “Save test data” first.");
+      } else {
+        showStatus("Firestore read successful.", "good");
+        const data = snapshot.data();
+        showResult("SUCCESS: test document read.\nPath: " + ref.path + "\n\n" + JSON.stringify(data, (key, value) => {
+          if (value && typeof value === "object" && value.seconds !== undefined && value.nanoseconds !== undefined) {
+            return new Date(value.seconds * 1000).toLocaleString();
+          }
+          return value;
+        }, 2));
+      }
+    } catch (error) {
+      showStatus("Firestore read failed: " + errorMessage(error), "bad");
+      showResult("Details: " + errorMessage(error));
+    } finally {
+      readBtn.disabled = !currentUser;
+    }
+  });
+</script>
+</body>
+</html>
