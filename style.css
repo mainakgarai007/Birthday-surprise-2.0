@@ -1709,3 +1709,20 @@ html, body {
   .portal-card { border-radius:20px; padding:19px 15px; }
   .created-link-actions button { flex:1; }
 }
+
+/* Welcome popup and feedback modal */
+.welcome-popup { position:fixed; inset:0; z-index:10002; display:flex; align-items:center; justify-content:center; padding:18px; background:rgba(48,20,42,.58); backdrop-filter:blur(7px); }
+.welcome-popup.popup-dismissed { display:none; }
+.welcome-popup-card,.feedback-card { width:min(100%,440px); background:#fffafd; border:1px solid #f1c8d9; border-radius:24px; padding:26px 22px; text-align:center; box-shadow:0 24px 80px #35112c44; }
+.welcome-emoji { font-size:2.6rem; margin-bottom:8px; }
+.welcome-popup-card h2,.feedback-card h2 { color:#792b55; font-size:1.45rem; margin:0 0 10px; }
+.welcome-popup-card p,.feedback-card p { color:#805a70; line-height:1.55; }
+.welcome-actions { display:flex; flex-wrap:wrap; gap:10px; margin-top:18px; }
+.welcome-actions > * { flex:1 1 150px; display:flex; justify-content:center; align-items:center; text-align:center; text-decoration:none; }
+.welcome-secondary { border:1px solid #e6b5cb; border-radius:14px; padding:12px 16px; min-height:48px; color:#8d2d5a; background:#fff; font:700 .95rem 'Poppins',sans-serif; cursor:pointer; }
+.feedback-modal:not([hidden]) { position:fixed; inset:0; z-index:10003; display:flex; align-items:center; justify-content:center; padding:18px; background:#30142ab8; }
+.feedback-card { position:relative; text-align:left; }
+.feedback-card label { display:block; margin:12px 0 6px; font-weight:700; color:#6e2b4d; }
+.feedback-card textarea { width:100%; resize:vertical; border:1px solid #e8bfd0; border-radius:12px; padding:12px; font:inherit; color:#4e2940; background:#fff; box-sizing:border-box; }
+.feedback-close { position:absolute; right:14px; top:12px; border:0; border-radius:50%; width:34px; height:34px; background:#ffedf4; color:#792b55; font-size:1.1rem; cursor:pointer; }
+@media(max-width:480px) { .welcome-popup-card,.feedback-card { padding:23px 17px; border-radius:20px; } }
