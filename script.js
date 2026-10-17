@@ -887,6 +887,8 @@ startCountdown();
     });
   };
   if (recipientMode) {
+    // Recipient sees the birthday pass-key page first; the arrow can open the popup on demand.
+    welcomePopup?.classList.add('popup-dismissed');
     hideOriginalApp();
     showRecipientGate();
     return;
