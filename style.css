@@ -1660,3 +1660,52 @@ html, body {
     margin-bottom: 14px;
   }
 }
+
+/* ─── Birthday Surprise 2.0 creator / recipient portal ─── */
+.portal-screen {
+  position: fixed; inset: 0; z-index: 10000; overflow-y: auto;
+  display: flex; align-items: flex-start; justify-content: center;
+  padding: clamp(14px, 3vh, 30px) 12px;
+  background: radial-gradient(circle at 15% 10%, #ffe0ec 0, transparent 38%), linear-gradient(145deg,#f8eafa,#ffeef2 52%,#fce3d8);
+  color: #53263f; font-family: 'Poppins', sans-serif;
+}
+.portal-screen.portal-hidden { display: none !important; }
+.portal-card {
+  width: min(100%, 620px); margin: auto; padding: clamp(20px,4vw,34px);
+  background: rgba(255,255,255,.93); border: 1px solid #f4c4d5; border-radius: 26px;
+  box-shadow: 0 18px 60px rgba(119,44,79,.18);
+}
+.portal-kicker { color:#c03e78; font-weight:800; letter-spacing:.12em; font-size:.75rem; margin-bottom:10px; }
+.portal-card h1 { font-size:clamp(1.7rem,5vw,2.3rem); line-height:1.15; margin-bottom:8px; color:#792b55; }
+.portal-card > p { color:#805a70; margin-bottom:18px; }
+.portal-form { display:grid; gap:13px; }
+.portal-form label { display:grid; gap:7px; font-size:.9rem; font-weight:700; }
+.portal-form input,.portal-form select {
+  width:100%; min-height:46px; border:1px solid #e8bfd0; border-radius:12px; padding:11px 13px;
+  background:#fffafd; color:#4e2940; font:inherit; outline:none;
+}
+.portal-form input:focus,.portal-form select:focus { border-color:#d44e8c; box-shadow:0 0 0 3px #f9d9e8; }
+.portal-primary { border:0; border-radius:14px; min-height:48px; padding:12px 16px; color:#fff; font:700 1rem 'Poppins',sans-serif; background:linear-gradient(135deg,#e44e91,#a72c70); box-shadow:0 7px 18px #d94f8a3b; cursor:pointer; }
+.portal-error { color:#b32655; font-size:.85rem; min-height:1.2em; }
+.portal-dashboard { margin-top:24px; padding-top:20px; border-top:1px solid #f0d8e2; }
+.portal-dashboard-head { display:flex; align-items:center; justify-content:space-between; gap:10px; margin-bottom:12px; }
+.portal-dashboard h2 { font-size:1.1rem; color:#792b55; }
+.portal-dashboard-head span { font-size:.8rem; font-weight:800; background:#ffedf4; border-radius:99px; padding:5px 10px; }
+.created-links { display:grid; gap:10px; }
+.portal-muted,.portal-note { font-size:.82rem; color:#8d7181; }
+.created-link { border:1px solid #f0d3df; border-radius:15px; padding:12px; display:grid; gap:10px; background:#fffafd; }
+.created-link-info { display:grid; gap:4px; min-width:0; }
+.created-link-info strong { color:#6e2b4d; }
+.created-link-info span { color:#8d7181; font-size:.78rem; }
+.created-link-info input { width:100%; border:1px solid #ead2dd; background:#fff; padding:8px; border-radius:8px; font-size:.75rem; }
+.created-link-actions { display:flex; gap:8px; }
+.created-link-actions button { border:1px solid #e6b5cb; border-radius:9px; padding:8px 14px; background:#fff; color:#8d2d5a; font-weight:700; cursor:pointer; }
+.created-link-actions .portal-delete { color:#b4234f; border-color:#edb4c4; }
+.portal-stats { display:flex; justify-content:space-between; align-items:center; padding:12px 0 5px; margin-top:10px; border-top:1px solid #f2dce5; }
+.portal-stats strong { font-size:.85rem; color:#8d7181; text-align:right; }
+.portal-note { line-height:1.5; margin-top:7px; }
+@media (max-width:480px) {
+  .portal-screen { padding:10px; }
+  .portal-card { border-radius:20px; padding:19px 15px; }
+  .created-link-actions button { flex:1; }
+}
