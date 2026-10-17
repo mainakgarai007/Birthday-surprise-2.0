@@ -769,7 +769,18 @@ startCountdown();
   const closeWelcomePopup = () => welcomePopup?.classList.add('popup-dismissed');
   document.getElementById('welcome-open')?.addEventListener('click', () => { welcomePopup?.classList.remove('popup-dismissed'); feedbackModal.hidden = true; });
   document.getElementById('welcome-close')?.addEventListener('click', closeWelcomePopup);
-  document.getElementById('welcome-create')?.addEventListener('click', closeWelcomePopup);
+  document.getElementById('welcome-create')?.addEventListener('click', () => {
+    closeWelcomePopup();
+    const giftLink = new URLSearchParams(location.hash.slice(1)).get('gift');
+    if (giftLink) {
+      // On a recipient link the creator portal is intentionally hidden.
+      // Return to the clean creator URL so the form can actually be used.
+      location.href = location.origin + location.pathname + location.search;
+      return;
+    }
+    portal.classList.remove('portal-hidden');
+    document.getElementById('creator-form')?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+  });
   document.getElementById('welcome-feedback')?.addEventListener('click', () => { closeWelcomePopup(); feedbackModal.hidden = false; });
   document.getElementById('feedback-close')?.addEventListener('click', () => { feedbackModal.hidden = true; });
   document.getElementById('feedback-copy')?.addEventListener('click', async () => {
