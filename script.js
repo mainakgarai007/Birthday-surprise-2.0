@@ -776,54 +776,23 @@ startCountdown();
     document.querySelectorAll('.curtain-overlay, #countdown-screen, #intro-screen').forEach(el => { el.style.display = 'none'; });
   };
   const showRecipientGate = () => {
-    portal.classList.remove('portal-hidden');
-    document.getElementById('portal-title').textContent = 'A little surprise for you 💗';
-    document.getElementById('portal-subtitle').textContent = 'Made by ' + (payload.creatorName || 'someone special') + '. Enter the pass key they created to unlock it.';
-    form.innerHTML = `
-      <label>Pass key
-        <input id="recipient-passkey" type="password" autocomplete="off" placeholder="Enter your pass key" required />
-      </label>
-      <button class="portal-primary" type="submit">🔓 Unlock surprise</button>
-      <p id="recipient-error" class="portal-error" role="alert"></p>
-    `;
-    document.getElementById('creator-dashboard').style.display = 'none';
-    form.addEventListener('submit', event => {
-      event.preventDefault();
-      const input = document.getElementById('recipient-passkey');
-      const msg = document.getElementById('recipient-error');
-      if ((input.value || '').trim() !== String(payload.passKey)) {
-        msg.textContent = 'That pass key does not match. Try again 💗';
-        input.focus();
-        return;
-      }
-      TARGET_PASSCODE = String(payload.passKey);
-      portal.classList.add('portal-hidden');
-      const quiz = document.getElementById('quiz-screen');
-      if (quiz) {
-        quiz.style.display = '';
-        quiz.classList.remove('hidden','hidden-screen');
-        quiz.classList.add('show');
-      }
-      const ambient = document.getElementById('bg-ambient');
-      if (ambient) ambient.style.display = '';
-      const title = document.getElementById('quiz-title');
-      const txt = document.getElementById('quiz-text');
-      if (title) title.textContent = 'A surprise from ' + (payload.creatorName || 'someone special');
-      if (txt) txt.textContent = 'Enter the pass key to open your surprise 💖';
-      const originalSubmit = window.submitBirthdayDate;
-      window.submitBirthdayDate = function() {
-        const boxes = document.querySelectorAll('.passcode-box');
-        const entered = Array.from(boxes).map(b => b.textContent).join('');
-        if (entered !== String(payload.passKey)) {
-          const message = document.getElementById('quiz-text');
-          if (message) message.textContent = 'Oops! Wrong pass key. Try again 💗';
-          return;
-        }
-        if (typeof originalSubmit === 'function') originalSubmit();
-      };
-      // Rebuild the keypad state so the pass-key screen starts empty.
-      if (typeof window.resetQuiz === 'function') window.resetQuiz();
-    });
+    // Use the original game's passcode screen as the recipient gate.
+    TARGET_PASSCODE = String(payload.passKey);
+    portal.classList.add('portal-hidden');
+    const quiz = document.getElementById('quiz-screen');
+    if (quiz) {
+      quiz.style.display = '';
+      quiz.classList.remove('hidden', 'hidden-screen');
+      quiz.classList.add('show');
+    }
+    const ambient = document.getElementById('bg-ambient');
+    if (ambient) ambient.style.display = '';
+    const title = document.getElementById('quiz-title');
+    const txt = document.getElementById('quiz-text');
+    if (title) title.textContent = 'A surprise from ' + (payload.creatorName || 'someone special');
+    if (txt) txt.textContent = 'Enter the 4-digit pass key to unlock 💖';
+    if (typeof window.resetQuiz === 'function') window.resetQuiz();
+    if (title && payload.favName) title.setAttribute('aria-label', 'Surprise for ' + payload.favName);
   };
   const updateFavLabel = () => {
     const gender = creatorGender.value;
@@ -889,7 +858,7 @@ startCountdown();
     const name = document.getElementById('creator-name').value.trim();
     const target = favName.value.trim();
     const passKey = document.getElementById('creator-passkey').value.trim();
-    if (!name || !target || passKey.length < 4) { error.textContent = 'Please fill every field. Pass key must be at least 4 characters.'; return; }
+    if (!name || !target || !/^\\d{4}$/.test(passKey)) { error.textContent = 'Please fill every field. Pass key must be exactly 4 digits (0–9).'; return; }
     const id = (crypto && crypto.randomUUID) ? crypto.randomUUID() : Date.now().toString(36) + Math.random().toString(36).slice(2,8);
     const data = { v:2, id, creatorGender:creatorGender.value, favGender:favGender.value, creatorName:name, favName:target, passKey };
     const encoded = btoa(unescape(encodeURIComponent(JSON.stringify(data))));
