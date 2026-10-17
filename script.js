@@ -59,7 +59,7 @@ function playMidnightChime() {}
 })();
 
 /* ─── SHINCHAN PASSCODE VERIFICATION (4 DIGITS) ─── */
-const TARGET_PASSCODE = "2005"; // 4-digit passcode
+let TARGET_PASSCODE = "2005"; // overwritten by a creator-generated link
 
 const SHINCHAN_GIFS = {
   ask: "assets/shinchan-birthday.png",
@@ -737,3 +737,168 @@ document.addEventListener('mousemove', e => {
 
 /* ─── START ON LOAD ─── */
 startCountdown();
+
+
+/* ─── Birthday Surprise 2.0 portal controller ─── */
+(function birthdaySurprisePortal() {
+  const portal = document.getElementById('creator-portal');
+  if (!portal) return;
+  const form = document.getElementById('creator-form');
+  const creatorGender = document.getElementById('creator-gender');
+  const favGender = document.getElementById('fav-gender');
+  const favLabel = document.getElementById('fav-name-label');
+  const favName = document.getElementById('fav-name');
+  const error = document.getElementById('portal-error');
+  const list = document.getElementById('created-links');
+  const totalOpens = document.getElementById('total-opens');
+  const storageKey = 'birthday-surprise-2-links-v1';
+  const safeRead = () => {
+    try { const value = JSON.parse(localStorage.getItem(storageKey) || '[]'); return Array.isArray(value) ? value.slice(0,3) : []; }
+    catch (_) { return []; }
+  };
+  const safeWrite = items => { try { localStorage.setItem(storageKey, JSON.stringify(items.slice(0,3))); } catch (_) {} };
+  const getPayload = () => {
+    try {
+      const raw = new URLSearchParams(location.hash.slice(1)).get('gift');
+      if (!raw) return null;
+      const payload = JSON.parse(decodeURIComponent(escape(atob(raw))));
+      if (!payload || payload.v !== 2 || !payload.id || !payload.passKey) return null;
+      return payload;
+    } catch (_) { return null; }
+  };
+  const payload = getPayload();
+  const recipientMode = Boolean(payload);
+  const hideOriginalApp = () => {
+    ['bg-ambient','quiz-screen','surprise-screen','gift-screen'].forEach(id => {
+      const el = document.getElementById(id);
+      if (el) { el.style.display = 'none'; el.classList.add('hidden-screen'); }
+    });
+    document.querySelectorAll('.curtain-overlay, #countdown-screen, #intro-screen').forEach(el => { el.style.display = 'none'; });
+  };
+  const showRecipientGate = () => {
+    portal.classList.remove('portal-hidden');
+    document.getElementById('portal-title').textContent = 'A little surprise for you 💗';
+    document.getElementById('portal-subtitle').textContent = 'Made by ' + (payload.creatorName || 'someone special') + '. Enter the pass key they created to unlock it.';
+    form.innerHTML = `
+      <label>Pass key
+        <input id="recipient-passkey" type="password" autocomplete="off" placeholder="Enter your pass key" required />
+      </label>
+      <button class="portal-primary" type="submit">🔓 Unlock surprise</button>
+      <p id="recipient-error" class="portal-error" role="alert"></p>
+    `;
+    document.getElementById('creator-dashboard').style.display = 'none';
+    form.addEventListener('submit', event => {
+      event.preventDefault();
+      const input = document.getElementById('recipient-passkey');
+      const msg = document.getElementById('recipient-error');
+      if ((input.value || '').trim() !== String(payload.passKey)) {
+        msg.textContent = 'That pass key does not match. Try again 💗';
+        input.focus();
+        return;
+      }
+      TARGET_PASSCODE = String(payload.passKey);
+      portal.classList.add('portal-hidden');
+      const quiz = document.getElementById('quiz-screen');
+      if (quiz) {
+        quiz.style.display = '';
+        quiz.classList.remove('hidden','hidden-screen');
+        quiz.classList.add('show');
+      }
+      const ambient = document.getElementById('bg-ambient');
+      if (ambient) ambient.style.display = '';
+      const title = document.getElementById('quiz-title');
+      const txt = document.getElementById('quiz-text');
+      if (title) title.textContent = 'A surprise from ' + (payload.creatorName || 'someone special');
+      if (txt) txt.textContent = 'Enter the pass key to open your surprise 💖';
+      const originalSubmit = window.submitBirthdayDate;
+      window.submitBirthdayDate = function() {
+        const boxes = document.querySelectorAll('.passcode-box');
+        const entered = Array.from(boxes).map(b => b.textContent).join('');
+        if (entered !== String(payload.passKey)) {
+          const message = document.getElementById('quiz-text');
+          if (message) message.textContent = 'Oops! Wrong pass key. Try again 💗';
+          return;
+        }
+        if (typeof originalSubmit === 'function') originalSubmit();
+      };
+      // Rebuild the keypad state so the pass-key screen starts empty.
+      if (typeof window.resetQuiz === 'function') window.resetQuiz();
+    });
+  };
+  const updateFavLabel = () => {
+    const gender = creatorGender.value;
+    const text = gender === 'male' ? 'Enter her name' : gender === 'female' ? 'Enter his name' : 'Your favourite person’s name';
+    favLabel.firstChild.textContent = text + ' ';
+    favName.placeholder = text;
+  };
+  const renderLinks = () => {
+    const items = safeRead();
+    document.getElementById('link-limit').textContent = items.length + ' / 3';
+    totalOpens.textContent = 'Needs analytics setup';
+    if (!items.length) {
+      list.innerHTML = '<p class="portal-muted">Your created links will appear here.</p>';
+      return;
+    }
+    list.innerHTML = '';
+    items.forEach(item => {
+      const row = document.createElement('article');
+      row.className = 'created-link';
+      const info = document.createElement('div');
+      info.className = 'created-link-info';
+      const name = document.createElement('strong');
+      name.textContent = item.favName || 'Surprise link';
+      const gender = document.createElement('span');
+      gender.textContent = 'Favourite person: ' + (item.favGender || 'not specified');
+      const url = document.createElement('input');
+      url.readOnly = true; url.value = item.url; url.setAttribute('aria-label','Created surprise URL');
+      info.append(name, gender, url);
+      const actions = document.createElement('div');
+      actions.className = 'created-link-actions';
+      const copy = document.createElement('button');
+      copy.type = 'button'; copy.textContent = 'Copy';
+      copy.addEventListener('click', async () => {
+        try { await navigator.clipboard.writeText(item.url); copy.textContent = 'Copied ✓'; }
+        catch (_) { url.select(); try { document.execCommand('copy'); copy.textContent = 'Copied ✓'; } catch (e) { copy.textContent = 'Select link'; } }
+        setTimeout(() => { copy.textContent = 'Copy'; }, 1600);
+      });
+      const remove = document.createElement('button');
+      remove.type = 'button'; remove.textContent = 'Delete'; remove.className = 'portal-delete';
+      remove.addEventListener('click', () => {
+        safeWrite(safeRead().filter(link => link.id !== item.id));
+        renderLinks();
+      });
+      actions.append(copy, remove);
+      row.append(info, actions);
+      list.appendChild(row);
+    });
+  };
+  if (recipientMode) {
+    hideOriginalApp();
+    showRecipientGate();
+    return;
+  }
+  hideOriginalApp();
+  portal.classList.remove('portal-hidden');
+  creatorGender.addEventListener('change', updateFavLabel);
+  updateFavLabel();
+  form.addEventListener('submit', event => {
+    event.preventDefault();
+    error.textContent = '';
+    const items = safeRead();
+    if (items.length >= 3) { error.textContent = 'You can create up to 3 links. Delete one first.'; return; }
+    const name = document.getElementById('creator-name').value.trim();
+    const target = favName.value.trim();
+    const passKey = document.getElementById('creator-passkey').value.trim();
+    if (!name || !target || passKey.length < 4) { error.textContent = 'Please fill every field. Pass key must be at least 4 characters.'; return; }
+    const id = (crypto && crypto.randomUUID) ? crypto.randomUUID() : Date.now().toString(36) + Math.random().toString(36).slice(2,8);
+    const data = { v:2, id, creatorGender:creatorGender.value, favGender:favGender.value, creatorName:name, favName:target, passKey };
+    const encoded = btoa(unescape(encodeURIComponent(JSON.stringify(data))));
+    const url = location.origin + location.pathname + '#gift=' + encoded;
+    items.push({ id, creatorName:name, favName:target, favGender:favGender.value, url, createdAt:Date.now() });
+    safeWrite(items);
+    renderLinks();
+    error.textContent = 'Link created! Copy it below and send it to your favourite person 💗';
+    document.getElementById('creator-passkey').value = '';
+  });
+  renderLinks();
+})();
