@@ -774,7 +774,7 @@ startCountdown();
       const el = document.getElementById(id);
       if (el) { el.style.display = 'none'; el.classList.add('hidden-screen'); }
     });
-    document.querySelectorAll('.curtain-overlay, #countdown-screen, #intro-screen').forEach(el => { el.style.display = 'none'; });
+    document.querySelectorAll('.curtain-overlay, #countdown-screen, #intro-screen, #countdown-wrap, #curtain-left, #curtain-right, #midnight-burst').forEach(el => { el.style.display = 'none'; });
   };
   const showRecipientGate = () => {
     // Use the original game's passcode screen as the recipient gate.
@@ -859,7 +859,7 @@ startCountdown();
     const name = document.getElementById('creator-name').value.trim();
     const target = favName.value.trim();
     const passKey = document.getElementById('creator-passkey').value.trim();
-    if (!name || !target || !/^\\d{4}$/.test(passKey)) { error.textContent = 'Please fill every field. Pass key must be exactly 4 digits (0–9).'; return; }
+    if (!name || !target || !/^[0-9]{4}$/.test(passKey)) { error.textContent = 'Please fill every field. Pass key must be exactly 4 digits (0–9).'; return; }
     const id = (crypto && crypto.randomUUID) ? crypto.randomUUID() : Date.now().toString(36) + Math.random().toString(36).slice(2,8);
     const data = { v:2, id, creatorGender:creatorGender.value, favGender:favGender.value, creatorName:name, favName:target, passKey };
     const encoded = btoa(unescape(encodeURIComponent(JSON.stringify(data)))).replaceAll('+', '-').replaceAll('/', '_').replaceAll('=', '');
