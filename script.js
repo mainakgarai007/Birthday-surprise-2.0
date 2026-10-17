@@ -770,9 +770,11 @@ startCountdown();
   const payload = getPayload();
   const recipientMode = Boolean(payload);
   const hideOriginalApp = () => {
+    // Hide screens with classes only. Inline display:none prevented later game
+    // screens from becoming visible when the original game's flow changed pages.
     ['bg-ambient','quiz-screen','surprise-screen','gift-screen'].forEach(id => {
       const el = document.getElementById(id);
-      if (el) { el.style.display = 'none'; el.classList.add('hidden-screen'); }
+      if (el) el.classList.add('hidden-screen');
     });
     document.querySelectorAll('.curtain-overlay, #countdown-screen, #intro-screen, #countdown-wrap, #curtain-left, #curtain-right, #midnight-burst').forEach(el => { el.style.display = 'none'; });
   };
