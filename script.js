@@ -862,7 +862,7 @@ startCountdown();
     if (!name || !target || !/^\\d{4}$/.test(passKey)) { error.textContent = 'Please fill every field. Pass key must be exactly 4 digits (0–9).'; return; }
     const id = (crypto && crypto.randomUUID) ? crypto.randomUUID() : Date.now().toString(36) + Math.random().toString(36).slice(2,8);
     const data = { v:2, id, creatorGender:creatorGender.value, favGender:favGender.value, creatorName:name, favName:target, passKey };
-    const encoded = btoa(unescape(encodeURIComponent(JSON.stringify(data)))).replace(/\\+/g, '-').replace(/\\//g, '_').replace(/=+$/g, '');
+    const encoded = btoa(unescape(encodeURIComponent(JSON.stringify(data)))).replaceAll('+', '-').replaceAll('/', '_').replaceAll('=', '');
     const url = location.origin + location.pathname + '#gift=' + encoded;
     items.push({ id, creatorName:name, favName:target, favGender:favGender.value, url, createdAt:Date.now() });
     safeWrite(items);
