@@ -37,6 +37,29 @@
         <label>Create your pass key
           <input id="creator-passkey" type="password" inputmode="numeric" pattern="[0-9]{4}" minlength="4" maxlength="4" autocomplete="off" placeholder="Create a 4-digit pass key" required />
         </label>
+        <details class="custom-message-editor">
+          <summary>✍️ Customize the birthday letter</summary>
+          <p class="portal-editor-help">These messages will appear on the final letter page. Leave a box unchanged to use its default text.</p>
+          <label>Letter heading
+            <textarea id="custom-letter-headline" rows="2" maxlength="180" placeholder="Happy Birthday dear [name] + emojis"></textarea>
+          </label>
+          <label>Letter paragraph 1
+            <textarea id="custom-letter-p1" rows="4" maxlength="650" placeholder="Your heartfelt birthday message…"></textarea>
+          </label>
+          <label>Letter paragraph 2
+            <textarea id="custom-letter-p2" rows="4" maxlength="650" placeholder="More wishes and memories…"></textarea>
+          </label>
+          <label>Final line
+            <textarea id="custom-letter-closing" rows="2" maxlength="300" placeholder="Happy birthday dear [name] 💖🎂"></textarea>
+          </label>
+        </details>
+        <details class="custom-message-editor">
+          <summary>🎂 Customize the cake-page wish</summary>
+          <p class="portal-editor-help">This appears after all seven candles are blown out.</p>
+          <label>Cake celebration message
+            <textarea id="custom-cake-wish" rows="3" maxlength="400" placeholder="May your year be as sweet, bright, and delightful…"></textarea>
+          </label>
+        </details>
         <button class="portal-primary" type="submit">✨ Create my link</button>
         <p id="portal-error" class="portal-error" role="alert"></p>
       </form>
@@ -728,7 +751,7 @@
         <!-- Wish Celebration Ribbon (Integrated at bottom, never blocks the cake) -->
         <div id="cake-wish-banner" class="cake-wish-banner hidden">
           <div class="wish-ribbon-card">
-            <p class="wish-main-text">🎉 "May your year be as sweet, bright, and delightful as this birthday cake! All your dreams will come true!" 💖🍰✨</p>
+            <p class="wish-main-text" id="cake-wish-text">🎉 "May your year be as sweet, bright, and delightful as this birthday cake! All your dreams will come true!" 💖🍰✨</p>
             <div class="wish-buttons-row">
               <button class="cake-btn-again" onclick="resetCake()">🕯️ Relight Candles</button>
               <button class="cake-btn-back" onclick="closeCakeModal()">💖 Back to Gifts</button>
