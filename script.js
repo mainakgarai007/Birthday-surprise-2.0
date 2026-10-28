@@ -474,24 +474,13 @@ function closeGiftModal() {
 }
 
 /* ─── SPECIAL BOX 3: LOVE & BIRTHDAY LETTER (TYPEWRITER ANIMATION) ─── */
-const LETTER_SECTIONS = [
-  {
-    id: 'letter-headline-el',
-    text: "Happy birthday to my favourite\nperson! ❤️"
-  },
-  {
-    id: 'letter-p1-el',
-    text: "I hope this year brings you everything you've been wishing for and so much more. Thank you for making my days happier, my bad days easier, and my life a little more beautiful just by being in it. 🥺💖"
-  },
-  {
-    id: 'letter-p2-el',
-    text: "I'm so lucky to have you, and I can't wait to make a million more memories with you. Here's to you, your dreams, and all the happiness you deserve."
-  },
-  {
-    id: 'letter-closing-el',
-    text: "Happy birthday, my love. I love you more than you know. 🫶🏻🎂❤️"
-  }
+const DEFAULT_LETTER_SECTIONS = [
+  { id: 'letter-headline-el', text: "Happy birthday to my favourite\nperson! ❤️" },
+  { id: 'letter-p1-el', text: "I hope this year brings you everything you've been wishing for and so much more. Thank you for making my days happier, my bad days easier, and my life a little more beautiful just by being in it. 🥺💖" },
+  { id: 'letter-p2-el', text: "I'm so lucky to have you, and I can't wait to make a million more memories with you. Here's to you, your dreams, and all the happiness you deserve." },
+  { id: 'letter-closing-el', text: "Happy birthday, my love. I love you more than you know. 🫶🏻🎂❤️" }
 ];
+let LETTER_SECTIONS = DEFAULT_LETTER_SECTIONS.map(section => ({ ...section }));
 
 let letterTypewriterTimer = null;
 let isLetterTyping = false;
@@ -719,14 +708,20 @@ function triggerMidnight() {
 
 /* ─── CONFETTI SYSTEM ─── */
 function launchConfetti() {
+  // Keep the effect lightweight on phones: cap particles and remove them after animation.
   const colors = ['#ff6b9d','#ffd700','#ff4db8','#00bcd4','#69f0ae','#ff5722'];
-  for (let i = 0; i < 80; i++) {
+  const reducedMotion = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  const count = reducedMotion ? 0 : 28;
+  const fragment = document.createDocumentFragment();
+  for (let i = 0; i < count; i++) {
     const c = document.createElement('div');
     c.className = 'confetti-piece';
-    const sz = Math.random() * 10 + 7;
-    c.style.cssText = `left:${Math.random()*100}%;top:-20px;width:${sz}px;height:${sz}px;background:${colors[Math.floor(Math.random()*colors.length)]};border-radius:${Math.random()>.5?'50%':'3px'};--cf-d:${Math.random()*3+2}s;--cf-delay:${Math.random()*2}s;`;
-    document.body.appendChild(c);
+    const sz = Math.random() * 7 + 5;
+    c.style.cssText = `left:${Math.random()*100}%;top:-20px;width:${sz}px;height:${sz}px;background:${colors[Math.floor(Math.random()*colors.length)]};border-radius:${Math.random()>.5?'50%':'3px'};--cf-d:${Math.random()*1.8+1.8}s;--cf-delay:${Math.random()*.5}s;`;
+    c.addEventListener('animationend', () => c.remove(), { once: true });
+    fragment.appendChild(c);
   }
+  document.body.appendChild(fragment);
 }
 
 /* ─── MOUSE TRAIL HEARTS ─── */
@@ -841,13 +836,24 @@ startCountdown();
     if (txt) txt.textContent = 'Enter the 4-digit pass key to unlock 💖';
     if (typeof window.resetQuiz === 'function') window.resetQuiz();
     if (title && payload.favName) title.setAttribute('aria-label', 'Surprise for ' + payload.favName);
-    if (payload.favName) {
-      const headline = document.getElementById('letter-headline-el');
-      const p2 = document.getElementById('letter-p2-el');
-      const closing = document.getElementById('letter-closing-el');
-      if (headline) headline.textContent = 'Happy birthday, ' + payload.favName + '! ❤️';
-      if (p2) p2.textContent = "I'm so lucky to have you, " + payload.favName + ", and I can't wait to make a million more memories with you. Here's to you, your dreams, and all the happiness you deserve.";
-      if (closing) closing.textContent = 'Happy birthday, ' + payload.favName + '. Sending you lots of happiness. 🫶🏻🎂❤️';
+    const defaults = DEFAULT_LETTER_SECTIONS.map(section => ({ ...section }));
+    LETTER_SECTIONS = defaults.map((section, index) => {
+      const keys = ['letterHeadline', 'letterP1', 'letterP2', 'letterClosing'];
+      const custom = payload[keys[index]];
+      return { ...section, text: typeof custom === 'string' && custom.trim() ? custom.trim() : section.text };
+    });
+    if (!payload.letterHeadline && payload.favName) {
+      LETTER_SECTIONS[0].text = 'Happy birthday, dear ' + payload.favName + '! ❤️';
+    }
+    if (!payload.letterP2 && payload.favName) {
+      LETTER_SECTIONS[2].text = "I'm so lucky to have you, " + payload.favName + ", and I can't wait to make a million more memories with you. Here's to you, your dreams, and all the happiness you deserve.";
+    }
+    if (!payload.letterClosing && payload.favName) {
+      LETTER_SECTIONS[3].text = 'Happy birthday, dear ' + payload.favName + '. Sending you lots of happiness. 🫶🏻🎂❤️';
+    }
+    const cakeWish = document.getElementById('cake-wish-text');
+    if (cakeWish && typeof payload.cakeWish === 'string' && payload.cakeWish.trim()) {
+      cakeWish.textContent = '🎉 ' + payload.cakeWish.trim();
     }
   };
   const updateFavLabel = () => {
@@ -918,7 +924,16 @@ startCountdown();
     const passKey = document.getElementById('creator-passkey').value.trim();
     if (!name || !target || !/^[0-9]{4}$/.test(passKey)) { error.textContent = 'Please fill every field. Pass key must be exactly 4 digits (0–9).'; return; }
     const id = (crypto && crypto.randomUUID) ? crypto.randomUUID() : Date.now().toString(36) + Math.random().toString(36).slice(2,8);
-    const data = { v:2, id, creatorGender:creatorGender.value, favGender:favGender.value, creatorName:name, favName:target, passKey };
+    const readMessage = id => (document.getElementById(id)?.value || '').trim();
+    const data = {
+      v:2, id, creatorGender:creatorGender.value, favGender:favGender.value,
+      creatorName:name, favName:target, passKey,
+      letterHeadline: readMessage('custom-letter-headline') || ('Happy birthday, dear ' + target + '! ❤️'),
+      letterP1: readMessage('custom-letter-p1') || DEFAULT_LETTER_SECTIONS[1].text,
+      letterP2: readMessage('custom-letter-p2') || ("I'm so lucky to have you, " + target + ", and I can't wait to make a million more memories with you. Here's to you, your dreams, and all the happiness you deserve."),
+      letterClosing: readMessage('custom-letter-closing') || ('Happy birthday, dear ' + target + '. Sending you lots of happiness. 🫶🏻🎂❤️'),
+      cakeWish: readMessage('custom-cake-wish') || 'May your year be as sweet, bright, and delightful as this birthday cake! All your dreams will come true! 💖🍰✨'
+    };
     const encoded = btoa(unescape(encodeURIComponent(JSON.stringify(data)))).replaceAll('+', '-').replaceAll('/', '_').replaceAll('=', '');
     const url = location.origin + location.pathname + '#gift=' + encoded;
     items.push({ id, creatorName:name, favName:target, favGender:favGender.value, url, createdAt:Date.now() });
