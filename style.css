@@ -1741,3 +1741,13 @@ html, body {
 .welcome-open { position:fixed; right:16px; bottom:18px; z-index:10004; }
 .welcome-popup { z-index:10003; }
 .feedback-modal:not([hidden]) { z-index:10005; }
+
+
+/* Creator message editors */
+.custom-message-editor { border:1px solid #f0c7d8; border-radius:14px; padding:12px 14px; margin:12px 0; background:#fff8fb; }
+.custom-message-editor summary { cursor:pointer; color:#8d2d5a; font-weight:800; padding:3px 0; }
+.portal-editor-help { color:#805a70; font-size:.84rem; line-height:1.45; margin:8px 0 12px; }
+.custom-message-editor label { display:block; margin:12px 0; font-size:.9rem; font-weight:700; color:#6e2b4d; }
+.custom-message-editor textarea { display:block; box-sizing:border-box; width:100%; margin-top:6px; border:1px solid #e8bfd0; border-radius:10px; padding:10px 12px; background:#fff; color:#4e2940; font:400 .9rem/1.5 'Poppins',sans-serif; resize:vertical; }
+.custom-message-editor textarea:focus { outline:2px solid #e889b2; outline-offset:1px; }
+@media (max-width:480px) { .custom-message-editor { padding:10px; } .custom-message-editor textarea { font-size:16px; } }
