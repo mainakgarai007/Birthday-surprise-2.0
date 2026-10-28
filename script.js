@@ -855,6 +855,15 @@ startCountdown();
     if (cakeWish && typeof payload.cakeWish === 'string' && payload.cakeWish.trim()) {
       cakeWish.textContent = '🎉 ' + payload.cakeWish.trim();
     }
+    const cakeLoveLine1 = document.getElementById('cake-love-line-1');
+    const cakeLoveLine2 = document.getElementById('cake-love-line-2');
+    if (typeof payload.cakeLoveMessage === 'string' && payload.cakeLoveMessage.trim()) {
+      const loveWords = payload.cakeLoveMessage.trim().split(/\\s+/);
+      const firstLine = loveWords.slice(0, Math.ceil(loveWords.length / 2)).join(' ');
+      const secondLine = loveWords.slice(Math.ceil(loveWords.length / 2)).join(' ');
+      if (cakeLoveLine1) cakeLoveLine1.textContent = firstLine;
+      if (cakeLoveLine2) cakeLoveLine2.textContent = secondLine;
+    }
   };
   const updateFavLabel = () => {
     const gender = creatorGender.value;
@@ -932,7 +941,8 @@ startCountdown();
       letterP1: readMessage('custom-letter-p1') || DEFAULT_LETTER_SECTIONS[1].text,
       letterP2: readMessage('custom-letter-p2') || ("I'm so lucky to have you, " + target + ", and I can't wait to make a million more memories with you. Here's to you, your dreams, and all the happiness you deserve."),
       letterClosing: readMessage('custom-letter-closing') || ('Happy birthday, dear ' + target + '. Sending you lots of happiness. 🫶🏻🎂❤️'),
-      cakeWish: readMessage('custom-cake-wish') || 'May your year be as sweet, bright, and delightful as this birthday cake! All your dreams will come true! 💖🍰✨'
+      cakeWish: readMessage('custom-cake-wish') || 'May your year be as sweet, bright, and delightful as this birthday cake! All your dreams will come true! 💖🍰✨',
+      cakeLoveMessage: readMessage('custom-cake-love') || 'i love you'
     };
     const encoded = btoa(unescape(encodeURIComponent(JSON.stringify(data)))).replaceAll('+', '-').replaceAll('/', '_').replaceAll('=', '');
     const url = location.origin + location.pathname + '#gift=' + encoded;
